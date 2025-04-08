@@ -3,7 +3,7 @@ body {
     font-family: sans-serif;
     font-size: 80%;
     line-height: 1.5;
-    padding: 15px;
+    padding: 10px; /* Menor padding geral para mobile */
     margin: 0 auto;
     background-color: #f4f4f4;
 }
@@ -11,30 +11,59 @@ body {
 h1 {
     text-align: center;
     color: #333;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 1.8em; /* Ajusta tamanho do título principal */
 }
 
 .controls {
     background-color: #fff;
-    padding: 12px;
+    padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     display: flex;
-    gap: 12px;
-    align-items: center;
+    gap: 8px 10px; /* Espaçamento vertical e horizontal */
+    align-items: flex-end; /* Alinha itens na base */
     flex-wrap: wrap;
 }
+ /* Grupo de controle para melhor layout */
+ .control-group {
+     display: flex;
+     flex-direction: column; /* Empilha label e input/select/button */
+     gap: 3px; /* Espaço entre label e input */
+     flex-grow: 1; /* Tenta ocupar espaço disponível */
+     flex-basis: 100px; /* Base de largura antes de crescer/encolher */
+     min-width: 100px; /* Largura mínima */
+ }
+ /* Botão carregar pode ter tamanho diferente */
+  .control-group button#loadSheetButton {
+     min-width: auto; /* Não força largura mínima */
+     flex-grow: 0; /* Não cresce */
+     padding-left: 15px;
+     padding-right: 15px;
+ }
+
 
 .controls label {
     font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 2px;
+    display: block;
 }
 
+/* Estilo padrão para inputs, selects e botões nos controles */
 .controls select,
-.controls button {
-    padding: 5px 8px;
+.controls button,
+.management-controls input[type="text"],
+.management-controls button {
+    padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 1em;
+    font-size: 1em; /* Relativo ao body */
+    width: 100%; /* Ocupa largura do container */
+    box-sizing: border-box; /* Importante para padding não estourar */
+    height: 36px; /* Altura fixa para alinhar melhor */
 }
 
 .controls button {
@@ -42,107 +71,137 @@ h1 {
     color: white;
     cursor: pointer;
     transition: background-color 0.2s ease;
-}
-
-.controls button:hover {
-    background-color: #0056b3;
-}
-
-.status-message {
     text-align: center;
-    padding: 8px;
-    margin-bottom: 12px;
-    border-radius: 4px;
-    font-weight: bold;
+    height: 36px; /* Altura fixa */
 }
+.controls button:hover { background-color: #0056b3; }
 
+ /* Estilos específicos para management controls */
+ .management-controls {
+     background-color: #e9ecef;
+     align-items: stretch; /* Alinha itens esticando */
+ }
+ .management-controls .control-group {
+     flex-direction: row; /* Itens na mesma linha (desktop) */
+     align-items: center; /* Alinha verticalmente */
+     flex-basis: auto; /* Largura automática */
+     min-width: 0; /* Reseta min-width */
+ }
+ .management-controls label {
+      margin-bottom: 0; margin-right: 5px; width: auto; flex-shrink: 0; /* Não encolhe o label */
+ }
+  .management-controls input[type="text"] {
+      width: auto; /* Input não ocupa 100% */ flex-grow: 1; /* Deixa ele crescer */
+ }
+  .management-controls button {
+      width: auto; /* Botão não ocupa 100% */ flex-grow: 0; flex-shrink: 0;
+ }
+
+
+.status-message { text-align: center; padding: 8px; margin-bottom: 12px; border-radius: 4px; font-weight: bold; }
 #loading { background-color: #e0e0e0; color: #333; }
 #updateStatus { min-height: 1.5em; }
 #updateStatus.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
 #updateStatus.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
 /* --- ESTILOS DA TABELA AJUSTADOS --- */
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-top: 15px;
-    max-height: 70vh;
-    overflow-y: auto;
-}
-
-#attendanceTable {
-    border-collapse: collapse;
-    width: 100%;
-}
+.table-container { width: 100%; overflow-x: auto; background-color: #fff; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 15px; max-height: 70vh; overflow-y: auto; }
+#attendanceTable { border-collapse: collapse; width: 100%; }
 
 #attendanceTable th,
 #attendanceTable td {
-    border: 1px solid #ddd;
-    padding: 4px 5px;
+    border: none; /* Remove borda padrão */
+    padding: 5px 6px;
     text-align: center;
     white-space: nowrap;
     font-size: 0.85em;
+    /* Adiciona borda inferior mais grossa */
+    border-bottom: 2px solid #ccc; /* <<< LINHA MAIS GROSSA ABAIXO */
+    border-right: 1px solid #eee; /* Linha vertical sutil */
 }
+#attendanceTable td:last-child, #attendanceTable th:last-child { border-right: none; }
+#attendanceTable tr:last-child td { border-bottom: none; } /* Remove borda da última linha */
 
-/* --- CABEÇALHO DA TABELA MODIFICADO --- */
 #attendanceTable thead th {
-    /* background-color: #f2f2f2; */ /* Original */
-    background-color: #d60f0f; /* <<< NOVO FUNDO */
-    color: #ffffff; /* <<< TEXTO BRANCO */
+    background-color: #f9f9f9;
+    color: #ffffff;
     font-weight: bold;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    /* Adiciona uma borda inferior sutil para separar do corpo ao rolar */
-    border-bottom: 2px solid #ccc;
+    position: sticky; top: 0; z-index: 10;
+    border-bottom: 3px solid #aaa; /* Borda mais grossa ainda abaixo do cabeçalho */
+    border-right: 1px solid #ccc;
 }
 
- /* Coluna fixa do nome - AJUSTAR FUNDO E COR */
-#attendanceTable thead th:first-child {
-    position: sticky; /* Garante que 'left' funcione */
-    left: 0;
-    /* background-color: #e9e9e9; */ /* Original */
-    background-color: #d60f0f; /* <<< NOVO FUNDO (igual aos outros) */
-    color: #ffffff; /* <<< TEXTO BRANCO (garantido) */
-    z-index: 11; /* Mantém acima dos outros cabeçalhos */
-    font-weight: bold;
-    /* Outras propriedades de th:first-child (min/max-width, text-align) permanecem abaixo */
+ /* Coluna fixa do nome */
+#attendanceTable thead th:first-child,
+#attendanceTable tbody td:first-child {
+    position: sticky; left: 0;
+    background-color: #f0f0f0; /* Fundo um pouco diferente para corpo */
+    z-index: 5; min-width: 130px; max-width: 220px; text-align: left;
+    overflow: hidden; text-overflow: ellipsis;
+    font-weight: bold; /* <<< NOME DO ALUNO EM NEGRITO */
+    font-size: 0.85em;
+    border-right: 2px solid #ccc; /* Linha divisória mais grossa */
+    border-bottom: 2px solid #ccc; /* Garante borda inferior igual */
 }
- /* ====================================== */
+#attendanceTable tbody tr:last-child td:first-child {
+    border-bottom: none; /* Remove borda inferior da última linha também na coluna fixa */
+}
 
- /* Estilos gerais para a célula do nome (cabeçalho e corpo) que afetam posicionamento/tamanho */
- #attendanceTable thead th:first-child,
- #attendanceTable tbody td:first-child {
-    position: sticky;
-    left: 0;
-    min-width: 130px;
-    max-width: 220px;
-    text-align: left;
-    overflow: hidden;
-    text-overflow: ellipsis;
- }
-  #attendanceTable tbody td:first-child {
-     background-color: #f9f9f9; /* Fundo da célula do nome no corpo (pode manter ou alterar) */
-     z-index: 5;
-     font-weight: normal;
-     font-size: 0.85em;
+ #attendanceTable thead th:first-child {
+     background-color: #f9f9f9; /* Mantém fundo do header */
+     color: #ffffff; /* Mantém cor do header */
+     z-index: 11;
+     font-weight: bold;
+     border-bottom: 3px solid #aaa; /* Garante borda do header */
  }
 
+#attendanceTable tbody tr:nth-child(even) td:not(:first-child) { background-color: #f9f9f9; }
+#attendanceTable tbody tr:nth-child(even) td:first-child { background-color: #e9e9e9; } /* Fundo par do nome um pouco diferente */
 
-#attendanceTable tbody tr:nth-child(even) { background-color: #f9f9f9; }
-#attendanceTable tbody tr:hover td:not(:first-child) { background-color: #f1f1f1; }
-#attendanceTable tbody tr:hover td:first-child { background-color: #f0f0f0; }
+#attendanceTable tbody tr:hover td:not(:first-child) { background-color: #e9e9e9; }
+#attendanceTable tbody tr:hover td:first-child { background-color: #e0e0e0; }
 
+#attendanceTable input[type="checkbox"] { cursor: pointer; transform: scale(1.0); vertical-align: middle; margin: 0; display: block; margin-left: auto; margin-right: auto; }
 
-#attendanceTable input[type="checkbox"] {
-    cursor: pointer;
-    transform: scale(1.0);
-    vertical-align: middle;
-    margin: 0;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+/* === Media Query para ajustar controles em telas menores === */
+@media (max-width: 700px) { /* Ponto de quebra ajustado */
+     .controls {
+         padding: 8px;
+         gap: 8px;
+         align-items: stretch; /* Faz grupos terem mesma altura */
+     }
+      /* Faz cada grupo ocupar mais espaço, forçando quebra */
+      .control-group {
+         min-width: calc(50% - 4px); /* Tenta 2 por linha, descontando o gap */
+         flex-basis: calc(50% - 4px);
+         flex-grow: 0; /* Impede de crescer além da base */
+      }
+      /* Garante que botão ocupe espaço */
+       .control-group button#loadSheetButton {
+           min-width: 100%; /* Ocupa o espaço do grupo */
+           width: 100%;
+       }
+
+      .management-controls .control-group {
+         flex-direction: column; /* Empilha no mobile */
+         align-items: stretch; /* Alinha esticando */
+         flex-basis: 100%; /* Ocupa linha inteira */
+      }
+       .management-controls label { margin-right: 0; margin-bottom: 3px; }
+        .management-controls input[type="text"] { width: 100%; }
+       .management-controls button { width: 100%; margin-top: 5px; }
+
+       h1 { font-size: 1.6em; } /* Reduz título principal */
 }
+
+@media (max-width: 400px) {
+    /* Em telas muito pequenas, força 1 controle por linha */
+     .control-group {
+         min-width: 100%;
+         flex-basis: 100%;
+     }
+      .control-group button#loadSheetButton {
+         width: 100%;
+     }
+}
+/* ======================================================== */
