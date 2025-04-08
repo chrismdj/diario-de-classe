@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIÁRIO DE CHAMADA</title>
+
+    <meta name="theme-color" content="#007bff">
+
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Diário de Chamada</h1>
+
+    <div class="controls">
+        <label for="sheetSelect">Turma:</label>
+        <select id="sheetSelect">
+            <option value="6B">6º B</option>
+            <option value="7B">7º B</option>
+            <option value="8B">8º B</option>
+            <option value="9B">9º B</option>
+            <option value="1 EM">1º EM</option>
+            <option value="2 EM">2º EM</option>
+            <option value="3 EM">3º EM</option>
+            </select>
+
+        <button id="loadSheetButton">Carregar Turma</button>
+    </div>
+
+    <div id="loading" class="status-message" style="display: none;">Carregando dados...</div>
+    <div id="updateStatus" class="status-message"></div>
+
+    <div class="table-container">
+        <table id="attendanceTable">
+            <thead>
+                <tr><th>Carregando...</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Selecione uma turma e clique em "Carregar Turma".</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
