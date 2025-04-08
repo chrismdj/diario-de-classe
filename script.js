@@ -1,5 +1,5 @@
 // ---------- CONFIGURAÇÃO OBRIGATÓRIA ----------
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZDj3VN95IOPRvYtoN7knuClVV0zTag9UkcEBoss_7n51SJ6hrfkghsG_mMspHCsAt_A/exec"; // <<< COLOQUE A URL CORRETA AQUI
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhVGPaF3gWYxOB19qskDrdQ5HxaTuDrM8xPmjUjWXLna59CEl7hPSFZNvKGCGUeK2kPw/exec"; // <<< COLOQUE A URL CORRETA AQUI
 
 // --- ESTRUTURA Escola -> Nomes das Abas (USE OS NOMES EM MAIÚSCULAS QUE VOCÊ CRIOU) ---
 const schoolClasses = {
