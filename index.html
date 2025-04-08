@@ -10,42 +10,58 @@
 </head>
 <body>
 
-    <header class="main-header">
-        <h1>Diário de Chamada</h1>
-        <button id="toggleControlsButton" aria-label="Mostrar/Esconder Controles" aria-expanded="false">
-            <span></span> <span></span> <span></span> </button>
-    </header>
-    <div id="collapsibleControls" class="controls-container collapsed"> <div class="controls">
-             <div class="control-group">
-                <label for="schoolSelect">Colégio:</label>
-                <select id="schoolSelect"> <option value="">-- Selecione --</option> </select>
-             </div>
-             <div class="control-group">
-                <label for="sheetSelect">Turma/Aba:</label>
-                <select id="sheetSelect" disabled> <option value="">-- Selecione --</option> </select>
-             </div>
-             <div class="control-group">
-                <label for="bimesterSelect">Bimestre:</label>
-                <select id="bimesterSelect"> <option value="0">Todos</option> <option value="2">2º Bim</option> <option value="3">3º Bim</option> <option value="4">4º Bim</option> </select>
-             </div>
-             <div class="control-group">
-                <button id="loadSheetButton">Carregar Turma</button>
-             </div>
-        </div>
+    <h1>Diário de Chamada</h1>
 
-        <div class="management-controls controls">
-            <div class="control-group full-width-mobile">
-                 <label for="newStudentName">Novo Aluno:</label>
-                 <input type="text" id="newStudentName" placeholder="Nome completo">
-                 <button id="addStudentButton">Adicionar</button>
-            </div>
-            </div>
+    <div class="controls">
+         <div class="control-group">
+            <label for="schoolSelect">Colégio:</label>
+            <select id="schoolSelect">
+                <option value="">-- Selecione o Colégio --</option>
+                </select>
+         </div>
+         <div class="control-group">
+            <label for="sheetSelect">Turma/Aba:</label>
+            <select id="sheetSelect" disabled>
+                <option value="">-- Selecione a Turma --</option>
+                </select>
+         </div>
+         <div class="control-group">
+            <label for="bimesterSelect">Bimestre:</label>
+            <select id="bimesterSelect">
+                <option value="0">Todos</option>
+                <option value="2">2º Bim (14/04-05/05)</option>
+                <option value="3">3º Bim (07/05-04/06)</option>
+                <option value="4">4º Bim (09/06-25/06)</option>
+            </select>
+         </div>
+         <div class="control-group">
+            <button id="loadSheetButton">Carregar Turma</button>
+         </div>
     </div>
-    <div id="loading" class="status-message" style="display: none;">...</div>
+
+    <div class="management-controls controls">
+        <div class="control-group full-width-mobile">
+             <label for="newStudentName">Novo Aluno:</label>
+             <input type="text" id="newStudentName" placeholder="Nome completo do aluno">
+             <button id="addStudentButton">Adicionar Aluno</button>
+        </div>
+         </div>
+
+
+    <div id="loading" class="status-message" style="display: none;">Carregando/Processando...</div>
     <div id="updateStatus" class="status-message"></div>
+
     <div class="table-container">
-        <table id="attendanceTable"><thead><tr><th>...</th></tr></thead><tbody><tr><td>...</td></tr></tbody></table>
+        <table id="attendanceTable">
+            <thead>
+                <tr><th>Carregando...</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Selecione um colégio, turma, bimestre e clique em "Carregar Turma".</td></tr>
+            </tbody>
+        </table>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
