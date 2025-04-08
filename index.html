@@ -3,38 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIÁRIO DE CHAMADA</title>
-    <meta name="theme-color" content="#007bff">
+    <title>DIÁRIO DE CHAMADA</title> <meta name="theme-color" content="#007bff">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png"> <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png"> <link rel="icon" type="image/png" sizes="192x192" href="icons/favicon-192x192.png"> <link rel="stylesheet" href="style.css">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/favicon-192x192.png">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <h1>Diário de Chamada</h1>
 
     <div class="controls">
-         <div class="control-group"> <label for="schoolSelect">Colégio:</label>
-            <select id="schoolSelect">
-                <option value="">-- Selecione o Colégio --</option>
-                </select>
-         </div>
          <div class="control-group"> <label for="sheetSelect">Turma/Aba:</label>
-            <select id="sheetSelect" disabled>
+            <select id="sheetSelect">
                 <option value="">-- Selecione a Turma --</option>
+                <option value="C3R_3A">C3R - 3A</option>
+                <option value="C3R_3B">C3R - 3B</option>
+                <option value="PSB_6A">PSB - 6A</option>
+                <option value="PRP_1EM">PRP - 1EM</option>
                 </select>
-         </div>
-         <div class="control-group"> <label for="bimesterSelect">Bimestre:</label>
-            <select id="bimesterSelect">
-                <option value="0">Todos</option>
-                <option value="2">2º Bim (14/04-05/05)</option>
-                <option value="3">3º Bim (07/05-04/06)</option>
-                <option value="4">4º Bim (09/06-25/06)</option>
-                 </select>
          </div>
          <div class="control-group"> <button id="loadSheetButton">Carregar Turma</button>
          </div>
     </div>
-
     <div class="management-controls controls">
         <div class="control-group full-width-mobile"> <label for="newStudentName">Novo Aluno:</label>
              <input type="text" id="newStudentName" placeholder="Nome completo do aluno">
@@ -52,7 +44,7 @@
                 <tr><th>Carregando...</th></tr>
             </thead>
             <tbody>
-                <tr><td>Selecione um colégio, turma, bimestre e clique em "Carregar Turma".</td></tr>
+                <tr><td>Selecione uma turma e clique em "Carregar Turma".</td></tr>
             </tbody>
         </table>
     </div>
