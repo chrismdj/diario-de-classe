@@ -3,7 +3,7 @@
 // ========================================================
 
 // ---------- CONFIGURAÇÃO OBRIGATÓRIA ----------
-const SCRIPT_URL = "URL_DO_SEU_WEB_APP_AQUI"; // <<< COLOQUE A URL CORRETA AQUI
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhVGPaF3gWYxOB19qskDrdQ5HxaTuDrM8xPmjUjWXLna59CEl7hPSFZNvKGCGUeK2kPw/exec"; // <<< COLOQUE A URL CORRETA AQUI
 
 // --- ESTRUTURA Escola -> Nomes das Abas ---
 // IMPORTANTE: VERIFIQUE SE OS NOMES DOS COLÉGIOS (CHAVES) E OS NOMES DAS ABAS
