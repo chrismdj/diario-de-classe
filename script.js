@@ -1,12 +1,27 @@
 // ========================================================
-// INÍCIO DO CÓDIGO COMPLETO script.js (Com Scroll TOTAL para o FIM)
+// INÍCIO DO CÓDIGO COMPLETO script.js (Com Scroll TOTAL e Populando Escolas)
 // ========================================================
 
 // ---------- CONFIGURAÇÃO OBRIGATÓRIA ----------
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhVGPaF3gWYxOB19qskDrdQ5HxaTuDrM8xPmjUjWXLna59CEl7hPSFZNvKGCGUeK2kPw/exec"; // <<< VERIFIQUE SUA URL
-const schoolClasses = { /* ... Sua estrutura de colégios e turmas (MAIÚSCULAS)... */ };
-// const schoolLogos = { /* ... Mapeamento logos (Comentado ou Removido) ... */ };
-// ----------------------------------------------
+
+// --- ESTRUTURA Escola -> Nomes das Abas ---
+// IMPORTANTE: VERIFIQUE CUIDADOSAMENTE A SINTAXE E OS NOMES AQUI!
+const schoolClasses = {
+  // Exemplo - SUBSTITUA PELOS SEUS DADOS REAIS (NOMES DE ABA EM MAIÚSCULAS)
+  "CRISTÃO 3R": [
+    "C3R_3A", "C3R_3B", "C3R_4A", "C3R_4B", "C3R_5A", "C3R_5B",
+    "C3R_6A", "C3R_6B", "C3R_7A", "C3R_7B", "C3R_8A", "C3R_8B"
+  ], // <-- Atenção à vírgula
+  "PAULISTA SANTA BARBARA": [
+    "PSB_6A", "PSB_7A", "PSB_8A", "PSB_9A"
+  ], // <-- Atenção à vírgula
+  "PAULISTA RODOLFO PIRANI": [
+    "PRP_6B", "PRP_7B", "PRP_8B", "PRP_9B",
+    "PRP_1EM", "PRP_2EM", "PRP_3EM"
+  ] // <-- SEM vírgula no último
+};
+// ----------------------------------------------------------------
 
 // --- Elementos da Página ---
 const schoolSelect = document.getElementById('schoolSelect');
@@ -20,91 +35,67 @@ const loadingElement = document.getElementById('loading');
 const updateStatusElement = document.getElementById('updateStatus');
 const newStudentNameInput = document.getElementById('newStudentName');
 const addStudentButton = document.getElementById('addStudentButton');
-// const schoolLogoElement = document.getElementById('schoolLogo'); // Removido ou Comentado
+// const schoolLogoElement = document.getElementById('schoolLogo'); // Logo comentado
 // --------------------------
 
 // --- Funções Auxiliares ---
 function showLoading(isLoading, message = "Carregando/Processando...") { loadingElement.textContent = message; loadingElement.style.display = isLoading ? 'block' : 'none'; }
 function showStatus(message, isError = false) { updateStatusElement.textContent = message; updateStatusElement.className = 'status-message'; if (message) { updateStatusElement.classList.add(isError ? 'error' : 'success'); } }
-function formatHeaderDateToDDMM(dateString) { if (!dateString || typeof dateString !== 'string') return dateString ? dateString.toString() : ""; try { if (/^\d{1,2}\/\d{1,2}(\/\d{2,4})?$/.test(dateString.trim())) { const parts = dateString.trim().split('/'); return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}`; } const dateObj = new Date(dateString); if (isNaN(dateObj.getTime())) { console.warn("Parse date header failed:", dateString); return dateString.trim(); } const day = String(dateObj.getDate()).padStart(2, '0'); const month = String(dateObj.getMonth() + 1).padStart(2, '0'); return `${day}/${month}`; } catch (e) { console.error("Format date header error:", dateString, e); return dateString.trim(); } }
+function formatHeaderDateToDDMM(dateString) { if (!dateString || typeof dateString !== 'string') return dateString ? dateString.toString() : ""; try { if (/^\d{1,2}\/\d{1,2}(\/\d{2,4})?$/.test(dateString.trim())) { const parts = dateString.trim().split('/'); return `<span class="math-inline">\{parts\[0\]\.padStart\(2, '0'\)\}/</span>{parts[1].padStart(2, '0')}`; } const dateObj = new Date(dateString); if (isNaN(dateObj.getTime())) { console.warn("Parse date header failed:", dateString); return dateString.trim(); } const day = String(dateObj.getDate()).padStart(2, '0'); const month = String(dateObj.getMonth() + 1).padStart(2, '0'); return `<span class="math-inline">\{day\}/</span>{month}`; } catch (e) { console.error("Format date header error:", dateString, e); return dateString.trim(); } }
 // --------------------------
 
 // --- Funções Dropdowns Dinâmicos ---
-function populateClassDropdown() { const selectedSchool = schoolSelect.value; sheetSelect.length = 1; sheetSelect.selectedIndex = 0; /* Logo logic commented out */ if (selectedSchool && schoolClasses[selectedSchool]) { const classes = schoolClasses[selectedSchool]; classes.forEach(sheetName => { const option = document.createElement('option'); option.value = sheetName; const nameParts = sheetName.split('_'); const friendlyName = nameParts.length > 1 ? nameParts.slice(1).join('_') : sheetName; option.textContent = friendlyName; sheetSelect.appendChild(option); }); sheetSelect.disabled = false; } else { sheetSelect.disabled = true; } tableHead.innerHTML = '<tr><th></th></tr>'; tableBody.innerHTML = '<tr><td>...</td></tr>'; showStatus("Selecione uma turma."); }
-function populateSchoolDropdown() { const schools = Object.keys(schoolClasses); schools.sort(); schools.forEach(schoolName => { const option = document.createElement('option'); option.value = schoolName; option.textContent = schoolName; schoolSelect.appendChild(option); });}
+function populateClassDropdown() {
+    console.log("Iniciando populateClassDropdown...");
+    const selectedSchool = schoolSelect.value;
+    console.log("Colégio selecionado:", selectedSchool);
+    sheetSelect.length = 1; sheetSelect.selectedIndex = 0; // Limpa turmas
+
+    // Popula dropdown de turmas
+    if (selectedSchool && schoolClasses[selectedSchool]) {
+        console.log("Encontradas classes para o colégio:", schoolClasses[selectedSchool]);
+        const classes = schoolClasses[selectedSchool];
+        classes.forEach(sheetName => {
+             const option = document.createElement('option'); option.value = sheetName; const nameParts = sheetName.split('_'); const friendlyName = nameParts.length > 1 ? nameParts.slice(1).join('_') : sheetName; option.textContent = friendlyName; sheetSelect.appendChild(option);
+        });
+        sheetSelect.disabled = false;
+        console.log("Dropdown de turmas populado. Total de opções:", sheetSelect.options.length);
+    } else {
+        console.log("Nenhum colégio selecionado ou sem turmas definidas para:", selectedSchool);
+        sheetSelect.disabled = true;
+    }
+    tableHead.innerHTML = '<tr><th></th></tr>'; tableBody.innerHTML = '<tr><td>...</td></tr>'; showStatus("Selecione uma turma.");
+}
+
+function populateSchoolDropdown() {
+     console.log("Iniciando populateSchoolDropdown..."); // DEBUG
+     // Verifica se schoolClasses existe e tem chaves antes de prosseguir
+     if (!schoolClasses || typeof schoolClasses !== 'object' || Object.keys(schoolClasses).length === 0) {
+          console.error("!!! Estrutura schoolClasses está vazia, inválida ou não definida !!!"); // DEBUG
+          showStatus("Erro: Configuração de escolas/turmas inválida no script.js.", true);
+          return; // Interrompe a função aqui
+     }
+     try {
+          const schools = Object.keys(schoolClasses);
+          console.log("Colégios encontrados na estrutura:", schools); // DEBUG
+          schools.sort();
+          schools.forEach(schoolName => {
+               const option = document.createElement('option'); option.value = schoolName; option.textContent = schoolName; schoolSelect.appendChild(option);
+          });
+          console.log("Finalizou populateSchoolDropdown. Total de opções:", schoolSelect.options.length); // DEBUG
+     } catch (error) {
+          console.error("Erro dentro de populateSchoolDropdown:", error); // DEBUG
+          showStatus("Erro ao carregar lista de colégios.", true);
+     }
+}
 // --------------------------------------------
 
 // --- Funções Principais ---
 async function loadSheetData() {
-    const selectedSheet = sheetSelect.value;
-    const selectedBimester = bimesterSelect.value;
+    const selectedSheet = sheetSelect.value; const selectedBimester = bimesterSelect.value;
     if (!selectedSheet) { showStatus("Selecione colégio/turma.", true); return; }
     showLoading(true, `Carregando...`); showStatus(""); tableHead.innerHTML = '<tr><th>Carregando...</th></tr>'; tableBody.innerHTML = '<tr><td>Carregando...</td></tr>';
-    let fetchUrl = `${SCRIPT_URL}?sheet=${encodeURIComponent(selectedSheet)}`;
-    if (selectedBimester !== "0") { fetchUrl += `&bimester=${encodeURIComponent(selectedBimester)}`; }
+    let fetchUrl = `<span class="math-inline">\{SCRIPT\_URL\}?sheet\=</span>{encodeURIComponent(selectedSheet)}`; if (selectedBimester !== "0") { fetchUrl += `&bimester=${encodeURIComponent(selectedBimester)}`; }
     console.log("Fetching from:", fetchUrl);
     try {
-        const response = await fetch(fetchUrl);
-        if (!response.ok) { let eMsg = `Erro HTTP ${response.status}.`; try{const d=await response.json(); if(d && d.message) eMsg += ` Detalhe: ${d.message}`;} catch(e){} throw new Error(eMsg); }
-        const data = await response.json();
-        if (data.status === 'error') { throw new Error(data.message || "Erro Apps Script."); }
-        if (!data.headers || typeof data.students === 'undefined') { throw new Error("Formato dados inesperado."); }
-
-        // Renderiza a tabela
-        renderAttendanceTable(data.headers, data.students);
-        // Atualiza status
-        showStatus(data.students.length > 0 ? "Dados carregados." : "Dados carregados (sem alunos).", false);
-        if (data.message && data.students.length > 0) { showStatus(updateStatusElement.textContent + " | Aviso: " + data.message, false); }
-        else if (data.message) { showStatus("Aviso: " + data.message, false); }
-
-        // === SCROLL TOTAL PARA O FINAL DA PÁGINA ===
-        // Usamos um pequeno setTimeout para dar tempo ao navegador de renderizar a tabela
-        // e calcular a altura correta do scrollHeight. 50ms geralmente é suficiente.
-        setTimeout(() => {
-            window.scrollTo({
-                top: document.body.scrollHeight, // <<< Rola para a altura total do corpo do documento
-                behavior: 'smooth' // <<< Efeito de rolagem suave
-            });
-            console.log("Scrolled to bottom of page."); // Log para confirmar
-        }, 50);
-        // ============================================
-
-    } catch (error) {
-        console.error("Erro:", error);
-        showStatus(`Erro: ${error.message}`, true);
-        tableHead.innerHTML = '<tr><th>Erro</th></tr>';
-        tableBody.innerHTML = '<tr><td>Não foi possível carregar.</td></tr>';
-    } finally {
-        showLoading(false);
-    }
-}
-
-function renderAttendanceTable(originalHeaders, students) { /* ... (Função MANTIDA - igual resposta #99) ... */ }
-async function handleAttendanceChange(event) { /* ... (Função MANTIDA - igual resposta #99) ... */ }
-async function addStudent() { /* ... (Função MANTIDA - igual resposta #99) ... */ }
-// -----------------------------------------------------------------------------
-
-// --- INICIALIZAÇÃO ---
-// (Mantida igual à resposta #99)
-window.addEventListener('DOMContentLoaded', (event) => {
-    console.log("DOM carregado. Iniciando configuração...");
-    try {
-        populateSchoolDropdown(); console.log("populateSchoolDropdown chamado.");
-        if(schoolSelect) { schoolSelect.addEventListener('change', populateClassDropdown); console.log("Listener 'change' adicionado a schoolSelect."); } else { console.error("Elemento schoolSelect não encontrado!"); }
-        if(bimesterSelect) { bimesterSelect.addEventListener('change', loadSheetData); console.log("Listener 'change' adicionado a bimesterSelect."); } else { console.error("Elemento bimesterSelect não encontrado!"); }
-        if(loadSheetButton) { loadSheetButton.addEventListener('click', loadSheetData); console.log("Listener 'click' adicionado a loadSheetButton."); } else { console.error("Elemento loadSheetButton não encontrado!"); }
-        if(addStudentButton) { addStudentButton.addEventListener('click', addStudent); console.log("Listener 'click' adicionado a addStudentButton."); } else { console.error("Elemento addStudentButton não encontrado!"); }
-        showStatus("Selecione um colégio para ver as turmas.");
-        console.log("Configuração inicial concluída.");
-    } catch (error) { console.error("Erro durante a inicialização DOMContentLoaded:", error); showStatus("Erro crítico ao inicializar a página.", true); }
-});
-// -----------------------------
-
-// --- Registro do Service Worker ---
-// (Mantido igual à resposta #99)
-if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').then(reg => console.log('SW registered.', reg)).catch(err => console.log('SW registration failed: ', err)); });} else { console.log('Service workers not supported.');}
-// -------------------------------------------------------
-
-// ========================================================
-// FIM DO CÓDIGO COMPLETO script.js
-// ========================================================
+        const response = await fetch(fetchUrl); if (!response.ok) { let eMsg = `Erro HTTP ${response.status}.`; try{const d=await response.json();
