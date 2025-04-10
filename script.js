@@ -3,7 +3,7 @@
 // ========================================================
 
 // ---------- CONFIGURAÇÃO OBRIGATÓRIA ----------
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhVGPaF3gWYxOB19qskDrdQ5HxaTuDrM8xPmjUjWXLna59CEl7hPSFZNvKGCGUeK2kPw/exec"; // <<< SUA URL ATUAL
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2DzC7c_qphZTCzJeU8PUh1k0Cz-XhYmojokRLsZ_PT1TaXM1dtHzxtz1Rw6vR5g7k/exec"; // <<< SUA URL ATUAL
 
 // --- ESTRUTURA Escola -> Nomes das Abas ---
 // IMPORTANTE: VERIFIQUE SE ESTÁ CORRETO COM SUAS ABAS EM MAIÚSCULAS
