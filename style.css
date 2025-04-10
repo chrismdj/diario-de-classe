@@ -8,13 +8,42 @@ body {
     background-color: #f4f4f4;
 }
 
-h1 {
-    text-align: center;
+/* --- ESTILO DO HEADER E BOTÃO HAMBURGUER --- */
+/* Estilo opcional para o container do header */
+.main-header {
+    display: flex;
+    justify-content: space-between; /* Alinha título à esquerda, botão à direita */
+    align-items: center;
+    margin-bottom: 15px; /* Mantém um espaço abaixo dos controles */
+}
+
+h1 { /* Movido para baixo para sobrescrever text-align se necessário */
     color: #333;
     margin-top: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 0; /* Removido se estiver no flex container */
     font-size: 1.8em;
+    text-align: left; /* Garante alinhamento à esquerda no flex container */
+    flex-grow: 1; /* Permite que o título ocupe espaço */
 }
+
+#hamburger-menu {
+    background: none;
+    border: 1px solid #ccc;
+    font-size: 1.5em; /* Tamanho do ícone */
+    cursor: pointer;
+    padding: 0px 8px; /* Ajuste o padding */
+    line-height: 1;
+    height: 36px; /* Altura similar a outros botões/selects */
+    min-width: 40px;
+    margin-left: 10px; /* Espaço entre título e botão */
+    flex-shrink: 0; /* Impede que o botão encolha */
+}
+
+#hamburger-menu:hover {
+    background-color: #eee;
+}
+/* --- FIM ESTILO HEADER --- */
+
 
 .controls {
     background-color: #fff;
@@ -27,20 +56,20 @@ h1 {
     align-items: flex-end;
     flex-wrap: wrap;
 }
- .control-group {
-     display: flex;
-     flex-direction: column;
-     gap: 3px;
-     flex-grow: 1;
-     flex-basis: 100px;
-     min-width: 100px;
- }
-  .control-group button#loadSheetButton {
-     min-width: auto;
-     flex-grow: 0;
-     padding-left: 15px;
-     padding-right: 15px;
- }
+  .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex-grow: 1;
+      flex-basis: 100px;
+      min-width: 100px;
+  }
+   .control-group button#loadSheetButton {
+       min-width: auto;
+       flex-grow: 0;
+       padding-left: 15px;
+       padding-right: 15px;
+  }
 
 .controls label {
     font-weight: bold;
@@ -72,28 +101,42 @@ h1 {
 }
 .controls button:hover { background-color: #0056b3; }
 
- .management-controls {
-     background-color: #e9ecef;
-     align-items: stretch;
- }
- .management-controls .control-group {
-     flex-direction: row;
-     align-items: center;
-     flex-basis: auto;
-     min-width: 0;
- }
-  .management-controls .control-group.full-width-mobile {
-     flex-basis: 100%;
- }
- .management-controls label {
-      margin-bottom: 0; margin-right: 5px; width: auto; flex-shrink: 0;
- }
-  .management-controls input[type="text"] {
-      width: auto; flex-grow: 1;
- }
-  .management-controls button {
-      width: auto; flex-grow: 0; flex-shrink: 0;
- }
+  .management-controls {
+      background-color: #e9ecef;
+      align-items: stretch; /* Alterado de flex-end para stretch */
+      /* Removido margin-bottom se ele for o último dentro de collapsible-section */
+      margin-bottom: 0;
+  }
+  .management-controls .control-group {
+      flex-direction: row;
+      align-items: center; /* Mudado de stretch para center para alinhar label/input/button */
+      flex-basis: auto;
+      min-width: 0;
+      gap: 5px; /* Adicionado gap entre label, input, button */
+  }
+   .management-controls .control-group.full-width-mobile {
+      flex-basis: 100%;
+  }
+  .management-controls label {
+       margin-bottom: 0; margin-right: 0; /* Removido margin-right */
+       width: auto; flex-shrink: 0;
+  }
+   .management-controls input[type="text"] {
+       width: auto; flex-grow: 1;
+  }
+   .management-controls button {
+       width: auto; flex-grow: 0; flex-shrink: 0;
+  }
+
+/* --- ESTILO PARA ESCONDER A SEÇÃO --- */
+#collapsible-section {
+    /* Adicione transições se quiser animar (requer mudar de display:none) */
+    margin-bottom: 15px; /* Adiciona espaço abaixo da seção inteira */
+}
+#collapsible-section.hidden {
+    display: none;
+}
+/* --- FIM ESTILO SEÇÃO COLAPSÁVEL --- */
 
 .status-message { text-align: center; padding: 8px; margin-bottom: 12px; border-radius: 4px; font-weight: bold; }
 #loading { background-color: #e0e0e0; color: #333; }
@@ -102,7 +145,7 @@ h1 {
 #updateStatus.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
 /* --- ESTILOS DA TABELA AJUSTADOS --- */
-.table-container { width: 100%; overflow-x: auto; background-color: #fff; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 15px; max-height: 70vh; overflow-y: auto; }
+.table-container { width: 100%; overflow-x: auto; background-color: #fff; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 15px; max-height: 70vh; /* Ajuste conforme necessário */ overflow-y: auto; }
 #attendanceTable { border-collapse: collapse; width: 100%; }
 
 #attendanceTable th,
@@ -112,7 +155,7 @@ h1 {
     text-align: center;
     white-space: nowrap;
     font-size: 0.85em;
-    border-bottom: 2px solid #ccc;
+    border-bottom: 1px solid #eee; /* Linha divisória mais sutil */
     border-right: 1px solid #eee;
 }
 #attendanceTable td:last-child, #attendanceTable th:last-child { border-right: none; }
@@ -120,53 +163,88 @@ h1 {
 
 /* --- CABEÇALHO DA TABELA MODIFICADO (FUNDO VERMELHO) --- */
 #attendanceTable thead th {
-    /* background-color: #f9f9f9; */ /* Original cinza claro */
-    background-color: #D9534F;     /* <<< NOVO FUNDO VERMELHO (pode usar 'red' se preferir) */
-    color: #ffffff;                /* <<< TEXTO BRANCO */
+    background-color: #D9534F;
+    color: #ffffff;
     font-weight: bold;
     position: sticky; top: 0; z-index: 10;
-    border-bottom: 3px solid #a94442; /* Borda inferior vermelha mais escura */
-    border-right: 1px solid #a94442;  /* Borda direita vermelha mais escura */
+    border-bottom: 2px solid #a94442; /* Borda inferior mais forte */
+    border-right: 1px solid #a94442;
 }
 
- /* Coluna fixa do nome - AJUSTAR FUNDO/COR */
+  /* Coluna fixa do nome - AJUSTAR FUNDO/COR */
 #attendanceTable thead th:first-child {
     position: sticky; left: 0;
-    /* background-color: #f9f9f9; */ /* Original cinza claro */
-    background-color: #D9534F;     /* <<< NOVO FUNDO VERMELHO (igual aos outros) */
-    color: #ffffff;                /* <<< TEXTO BRANCO (garantido) */
+    background-color: #D9534F;
+    color: #ffffff;
     z-index: 11; /* Acima dos outros cabeçalhos */
     font-weight: bold;
-    border-right: 2px solid #a94442; /* Separador direito vermelho mais escuro */
+    border-right: 2px solid #a94442; /* Separador direito mais forte */
 }
- /* ====================================== */
+  /* ====================================== */
 
- /* Estilos gerais da primeira coluna (posicionamento/tamanho) */
- #attendanceTable thead th:first-child,
- #attendanceTable tbody td:first-child {
+  /* Estilos gerais da primeira coluna (posicionamento/tamanho) */
+  #attendanceTable thead th:first-child,
+  #attendanceTable tbody td:first-child {
     position: sticky; left: 0; min-width: 130px; max-width: 220px; text-align: left;
     overflow: hidden; text-overflow: ellipsis;
-    border-bottom: 2px solid #ccc; /* Garante borda inferior padrão */
- }
- #attendanceTable tbody td:first-child { /* Célula do nome no CORPO da tabela */
-     background-color: #f0f0f0;
-     z-index: 5;
-     font-weight: bold; /* NOME DO ALUNO EM NEGRITO */
-     font-size: 0.85em;
-     border-right: 2px solid #ccc; /* Separador direito claro */
- }
+    border-right: 2px solid #ccc; /* Separador direito claro */
+  }
+  #attendanceTable tbody td:first-child { /* Célula do nome no CORPO da tabela */
+      background-color: #f0f0f0; /* Fundo cinza claro */
+      z-index: 5;
+      font-weight: bold; /* NOME DO ALUNO EM NEGRITO */
+      font-size: 0.85em;
+  }
 #attendanceTable tbody tr:last-child td:first-child { border-bottom: none; }
 
 
 #attendanceTable tbody tr:nth-child(even) td:not(:first-child) { background-color: #f9f9f9; }
-#attendanceTable tbody tr:nth-child(even) td:first-child { background-color: #e9e9e9; }
+#attendanceTable tbody tr:nth-child(even) td:first-child { background-color: #e9e9e9; } /* Cor ligeiramente diferente para nome em linha par */
 
 #attendanceTable tbody tr:hover td:not(:first-child) { background-color: #e9e9e9; }
-#attendanceTable tbody tr:hover td:first-child { background-color: #e0e0e0; }
+#attendanceTable tbody tr:hover td:first-child { background-color: #e0e0e0; } /* Hover mais escuro para nome */
 
 #attendanceTable input[type="checkbox"] { cursor: pointer; transform: scale(1.0); vertical-align: middle; margin: 0; display: block; margin-left: auto; margin-right: auto; }
 
 /* === Media Queries === */
-@media (max-width: 700px) { .controls { padding: 8px; gap: 8px; align-items: stretch; } .control-group { min-width: calc(50% - 4px); flex-basis: calc(50% - 4px); flex-grow: 0; } .control-group label { font-size: 0.85em; } .control-group select, .control-group button { padding: 6px 8px; font-size: 0.9em; } .control-group button#loadSheetButton { flex-grow: 1; min-width: 100px; width: auto; } .management-controls .control-group { flex-direction: column; align-items: stretch; flex-basis: 100%; } .management-controls label { margin-right: 0; margin-bottom: 3px; } .management-controls input[type="text"] { width: 100%; } .management-controls button { width: 100%; margin-top: 5px; } h1 { font-size: 1.6em; } }
-@media (max-width: 400px) { .control-group { min-width: 100%; flex-basis: 100%; } .control-group button#loadSheetButton { width: 100%; } }
+@media (max-width: 700px) {
+    /* Ajuste opcional para header responsivo */
+    .main-header {
+        flex-direction: column; /* Empilha título e botão */
+        align-items: flex-start; /* Alinha ambos à esquerda */
+    }
+    h1 {
+        text-align: center; /* Centraliza H1 no modo coluna */
+        width: 100%; /* Faz H1 ocupar a largura */
+        margin-bottom: 10px; /* Adiciona espaço abaixo do H1 */
+    }
+    #hamburger-menu {
+        /* margin-top: 5px; Espaço entre título e botão */
+        align-self: flex-end; /* Coloca o botão à direita no modo coluna */
+    }
+    /* Fim ajuste header responsivo */
+
+    .controls { padding: 8px; gap: 8px; align-items: stretch; }
+    .control-group { min-width: calc(50% - 4px); flex-basis: calc(50% - 4px); flex-grow: 0; }
+    .control-group label { font-size: 0.85em; }
+    .control-group select, .control-group button { padding: 6px 8px; font-size: 0.9em; }
+    .control-group button#loadSheetButton { flex-grow: 1; min-width: 100px; width: auto; }
+
+    .management-controls { padding: 8px; } /* Padding igual aos outros controles */
+    .management-controls .control-group {
+        flex-direction: column; /* Empilha label, input, button */
+        align-items: stretch; /* Estica elementos */
+        flex-basis: 100%;
+        gap: 5px; /* Espaço entre elementos empilhados */
+    }
+    .management-controls label { margin-right: 0; margin-bottom: 3px; }
+    .management-controls input[type="text"] { width: 100%; }
+    .management-controls button { width: 100%; margin-top: 5px; }
+    h1 { font-size: 1.6em; } /* Reduzido no CSS original */
+}
+@media (max-width: 400px) {
+    .control-group { min-width: 100%; flex-basis: 100%; }
+    .control-group button#loadSheetButton { width: 100%; }
+    /* O management-controls já está 100% width no media query anterior */
+}
 /* ======================================================== */

@@ -1,5 +1,5 @@
 // ========================================================
-// INÍCIO DO CÓDIGO COMPLETO script.js (Com Logs de Debug Adicionados)
+// INÍCIO DO CÓDIGO COMPLETO script.js (Com Logs e Menu Hambúrguer)
 // ========================================================
 
 // ---------- CONFIGURAÇÃO OBRIGATÓRIA ----------
@@ -34,6 +34,8 @@ const loadingElement = document.getElementById('loading');
 const updateStatusElement = document.getElementById('updateStatus');
 const newStudentNameInput = document.getElementById('newStudentName');
 const addStudentButton = document.getElementById('addStudentButton');
+const hamburgerMenu = document.getElementById('hamburger-menu'); // <-- ADICIONADO PARA HAMBURGUER
+const collapsibleSection = document.getElementById('collapsible-section'); // <-- ADICIONADO PARA HAMBURGUER
 // --------------------------
 
 // --- Funções Auxiliares ---
@@ -52,20 +54,18 @@ function populateSchoolDropdown() { console.log("Iniciando populateSchoolDropdow
 async function loadSheetData() {
     const selectedSheet = sheetSelect.value; const selectedBimester = bimesterSelect.value;
     if (!selectedSheet) { showStatus("Selecione colégio/turma.", true); return; }
-    showLoading(true, `Carregando...`); showStatus(""); tableHead.innerHTML = '<tr><th>Carregando...</th></tr>'; tableBody.innerHTML = '<tr><td>Carregando...</td></tr>';
+    showLoading(true, `Carregando ${selectedSheet}...`); showStatus(""); tableHead.innerHTML = '<tr><th>Carregando...</th></tr>'; tableBody.innerHTML = '<tr><td>Carregando...</td></tr>';
     let fetchUrl = `${SCRIPT_URL}?sheet=${encodeURIComponent(selectedSheet)}`; if (selectedBimester !== "0") { fetchUrl += `&bimester=${encodeURIComponent(selectedBimester)}`; }
     console.log("Fetching from:", fetchUrl); // Log existente
     try {
         const response = await fetch(fetchUrl); if (!response.ok) { let eMsg = `Erro HTTP ${response.status}.`; try{const d=await response.json(); if(d && d.message) eMsg += ` Detalhe: ${d.message}`;} catch(e){} throw new Error(eMsg); }
         const data = await response.json(); if (data.status === 'error') { throw new Error(data.message || "Erro Apps Script."); } if (!data.headers || typeof data.students === 'undefined') { throw new Error("Formato dados inesperado."); }
 
-        // === ADICIONADO PARA DEBUG DO FILTRO DE BIMESTRE ===
-        console.log("========= APPS SCRIPT DEBUG INFO (Header Processing) =========");
-        // Mostra a informação de debug enviada pelo Apps Script (se houver)
-        console.log(JSON.stringify(data.debugInfo || {info: "Nenhuma informação de debug recebida do Apps Script."}, null, 2));
-        // Mostra os cabeçalhos que o JS efetivamente recebeu para renderizar
-        console.log("HEADERS RECEBIDOS FINALMENTE PELO JS (Após Filtro):", data.headers);
-        console.log("============================================================");
+        // === DEBUG INFO (COMENTADO OU REMOVIDO SE NÃO PRECISAR MAIS) ===
+        // console.log("========= APPS SCRIPT DEBUG INFO (Header Processing) =========");
+        // console.log(JSON.stringify(data.debugInfo || {info: "Nenhuma informação de debug recebida do Apps Script."}, null, 2));
+        // console.log("HEADERS RECEBIDOS FINALMENTE PELO JS (Após Filtro):", data.headers);
+        // console.log("============================================================");
         // ==================================================
 
         renderAttendanceTable(data.headers, data.students); showStatus(data.students.length > 0 ? "Dados carregados." : "Dados carregados (sem alunos).", false); if (data.message && data.students.length > 0) { showStatus(updateStatusElement.textContent + " | Aviso: " + data.message, false); } else if (data.message) { showStatus("Aviso: " + data.message, false); }
@@ -85,9 +85,40 @@ window.addEventListener('DOMContentLoaded', (event) => {
         if (!schoolSelect) { console.error("Elemento 'schoolSelect' NÃO encontrado!"); showStatus("Erro crítico: Elemento 'schoolSelect' não encontrado.", true); return; }
         populateSchoolDropdown(); console.log("populateSchoolDropdown chamado.");
         if(schoolSelect) { schoolSelect.addEventListener('change', populateClassDropdown); console.log("Listener 'change' adicionado a schoolSelect."); }
-        if(bimesterSelect) { bimesterSelect.addEventListener('change', loadSheetData); console.log("Listener 'change' adicionado a bimesterSelect."); }
+        // MODIFICADO: Listener do bimesterSelect só carrega dados se uma turma já estiver selecionada.
+        if(bimesterSelect) {
+             bimesterSelect.addEventListener('change', () => {
+                 if (sheetSelect.value) { // Só carrega se uma turma estiver selecionada
+                     loadSheetData();
+                 }
+             });
+             console.log("Listener 'change' adicionado a bimesterSelect.");
+         }
         if(loadSheetButton) { loadSheetButton.addEventListener('click', loadSheetData); console.log("Listener 'click' adicionado a loadSheetButton."); }
         if(addStudentButton) { addStudentButton.addEventListener('click', addStudent); console.log("Listener 'click' adicionado a addStudentButton."); }
+
+        // --- LÓGICA DO MENU HAMBURGUER ---
+        if (hamburgerMenu && collapsibleSection) {
+            hamburgerMenu.addEventListener('click', () => {
+                collapsibleSection.classList.toggle('hidden');
+
+                // --- Lógica Opcional para trocar o ícone e aria-label ---
+                if (collapsibleSection.classList.contains('hidden')) {
+                    hamburgerMenu.textContent = '✕'; // Ícone de Fechar (Xis)
+                    hamburgerMenu.setAttribute('aria-label', 'Mostrar Controles');
+                } else {
+                    hamburgerMenu.textContent = '☰'; // Ícone de Hambúrguer
+                    hamburgerMenu.setAttribute('aria-label', 'Ocultar Controles');
+                }
+                // --- Fim da Lógica Opcional ---
+            });
+            console.log("Listener 'click' adicionado a hamburgerMenu.");
+        } else {
+             console.error("Erro: Elemento hamburgerMenu ou collapsibleSection não encontrado!");
+             // Não impede o resto da inicialização, mas avisa no console.
+        }
+        // --- FIM DA LÓGICA DO MENU HAMBURGUER ---
+
         showStatus("Selecione um colégio para ver as turmas.");
         console.log("Configuração inicial concluída.");
     } catch (error) { console.error("Erro durante a inicialização DOMContentLoaded:", error); showStatus("Erro crítico ao inicializar a página.", true); }
