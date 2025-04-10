@@ -1,5 +1,5 @@
 // ========================================================
-// INÍCIO DO CÓDIGO COMPLETO script.js (Com Logs e Menu Hambúrguer)
+// INÍCIO DO CÓDIGO COMPLETO script.js (vCom Auto-Recolher)
 // ========================================================
 
 // ---------- CONFIGURAÇÃO OBRIGATÓRIA ----------
@@ -34,8 +34,8 @@ const loadingElement = document.getElementById('loading');
 const updateStatusElement = document.getElementById('updateStatus');
 const newStudentNameInput = document.getElementById('newStudentName');
 const addStudentButton = document.getElementById('addStudentButton');
-const hamburgerMenu = document.getElementById('hamburger-menu'); // <-- ADICIONADO PARA HAMBURGUER
-const collapsibleSection = document.getElementById('collapsible-section'); // <-- ADICIONADO PARA HAMBURGUER
+const hamburgerMenu = document.getElementById('hamburger-menu'); // <-- Referência para o botão
+const collapsibleSection = document.getElementById('collapsible-section'); // <-- Referência para a seção
 // --------------------------
 
 // --- Funções Auxiliares ---
@@ -52,29 +52,86 @@ function populateSchoolDropdown() { console.log("Iniciando populateSchoolDropdow
 
 // --- Funções Principais ---
 async function loadSheetData() {
-    const selectedSheet = sheetSelect.value; const selectedBimester = bimesterSelect.value;
-    if (!selectedSheet) { showStatus("Selecione colégio/turma.", true); return; }
-    showLoading(true, `Carregando ${selectedSheet}...`); showStatus(""); tableHead.innerHTML = '<tr><th>Carregando...</th></tr>'; tableBody.innerHTML = '<tr><td>Carregando...</td></tr>';
-    let fetchUrl = `${SCRIPT_URL}?sheet=${encodeURIComponent(selectedSheet)}`; if (selectedBimester !== "0") { fetchUrl += `&bimester=${encodeURIComponent(selectedBimester)}`; }
-    console.log("Fetching from:", fetchUrl); // Log existente
-    try {
-        const response = await fetch(fetchUrl); if (!response.ok) { let eMsg = `Erro HTTP ${response.status}.`; try{const d=await response.json(); if(d && d.message) eMsg += ` Detalhe: ${d.message}`;} catch(e){} throw new Error(eMsg); }
-        const data = await response.json(); if (data.status === 'error') { throw new Error(data.message || "Erro Apps Script."); } if (!data.headers || typeof data.students === 'undefined') { throw new Error("Formato dados inesperado."); }
+    const selectedSheet = sheetSelect.value;
+    const selectedBimester = bimesterSelect.value;
+    if (!selectedSheet) {
+        showStatus("Selecione colégio/turma.", true);
+        return;
+    }
 
-        // === DEBUG INFO (COMENTADO OU REMOVIDO SE NÃO PRECISAR MAIS) ===
+    // --- ADICIONADO: Recolher controles antes de carregar ---
+    if (collapsibleSection && !collapsibleSection.classList.contains('hidden')) {
+        collapsibleSection.classList.add('hidden');
+        if (hamburgerMenu) { // Atualiza o botão se ele existir
+            hamburgerMenu.textContent = '✕'; // Ícone de Fechar (Xis)
+            hamburgerMenu.setAttribute('aria-label', 'Mostrar Controles');
+        }
+        console.log("Controles recolhidos automaticamente.");
+    }
+    // --- FIM DA ADIÇÃO ---
+
+    showLoading(true, `Carregando ${selectedSheet}...`);
+    showStatus("");
+    tableHead.innerHTML = '<tr><th>Carregando...</th></tr>';
+    tableBody.innerHTML = '<tr><td>Carregando...</td></tr>';
+
+    let fetchUrl = `${SCRIPT_URL}?sheet=${encodeURIComponent(selectedSheet)}`;
+    if (selectedBimester !== "0") {
+        fetchUrl += `&bimester=${encodeURIComponent(selectedBimester)}`;
+    }
+    console.log("Fetching from:", fetchUrl);
+
+    try {
+        const response = await fetch(fetchUrl);
+        if (!response.ok) {
+            let eMsg = `Erro HTTP ${response.status}.`;
+            try {
+                const d = await response.json();
+                if (d && d.message) eMsg += ` Detalhe: ${d.message}`
+            } catch (e) {}
+            throw new Error(eMsg);
+        }
+        const data = await response.json();
+        if (data.status === 'error') {
+            throw new Error(data.message || "Erro Apps Script.");
+        }
+        if (!data.headers || typeof data.students === 'undefined') {
+            throw new Error("Formato dados inesperado.");
+        }
+
+        // === DEBUG INFO (Pode remover ou comentar se não precisar) ===
         // console.log("========= APPS SCRIPT DEBUG INFO (Header Processing) =========");
         // console.log(JSON.stringify(data.debugInfo || {info: "Nenhuma informação de debug recebida do Apps Script."}, null, 2));
         // console.log("HEADERS RECEBIDOS FINALMENTE PELO JS (Após Filtro):", data.headers);
         // console.log("============================================================");
         // ==================================================
 
-        renderAttendanceTable(data.headers, data.students); showStatus(data.students.length > 0 ? "Dados carregados." : "Dados carregados (sem alunos).", false); if (data.message && data.students.length > 0) { showStatus(updateStatusElement.textContent + " | Aviso: " + data.message, false); } else if (data.message) { showStatus("Aviso: " + data.message, false); }
-        // Scroll para o final
-        setTimeout(() => { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); console.log("Scrolled to bottom."); }, 50); // Log existente
-    } catch (error) { console.error("Erro em loadSheetData:", error); showStatus(`Erro ao carregar: ${error.message}`, true); tableHead.innerHTML = '<tr><th>Erro</th></tr>'; tableBody.innerHTML = '<tr><td>Não foi possível carregar.</td></tr>'; } finally { showLoading(false); }
+        renderAttendanceTable(data.headers, data.students);
+        showStatus(data.students.length > 0 ? "Dados carregados." : "Dados carregados (sem alunos).", false);
+        if (data.message && data.students.length > 0) {
+            showStatus(updateStatusElement.textContent + " | Aviso: " + data.message, false);
+        } else if (data.message) {
+            showStatus("Aviso: " + data.message, false);
+        }
+        // Scroll para o final (acontece DEPOIS de recolher os controles)
+        setTimeout(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            console.log("Scrolled to bottom.");
+        }, 50);
+    } catch (error) {
+        console.error("Erro em loadSheetData:", error);
+        showStatus(`Erro ao carregar: ${error.message}`, true);
+        tableHead.innerHTML = '<tr><th>Erro</th></tr>';
+        tableBody.innerHTML = '<tr><td>Não foi possível carregar.</td></tr>';
+    } finally {
+        showLoading(false);
+    }
 }
+
 function renderAttendanceTable(originalHeaders, students) { tableHead.innerHTML = ''; tableBody.innerHTML = ''; const headerRow = tableHead.insertRow(); const thName = document.createElement('th'); thName.textContent = 'Nome do Aluno'; headerRow.appendChild(thName); const formattedHeaders = []; if (originalHeaders && originalHeaders.length > 0) { originalHeaders.forEach(h => { const th = document.createElement('th'); const fh = formatHeaderDateToDDMM(h); th.textContent = fh; headerRow.appendChild(th); formattedHeaders.push(fh); });} else { console.warn("Nenhum header de data.");} if (!students || students.length === 0) { const colspan = formattedHeaders.length + 1; tableBody.innerHTML = `<tr><td colspan="${colspan}">Nenhum aluno encontrado.</td></tr>`; return; } students.forEach(student => { if (!student || !student.name) return; const tr = tableBody.insertRow(); const tdName = tr.insertCell(); tdName.textContent = student.name; formattedHeaders.forEach((fh, index) => { const tdCheck = tr.insertCell(); const cb = document.createElement('input'); cb.type = 'checkbox'; cb.dataset.studentName = student.name; cb.dataset.date = fh; cb.checked = (student.attendance && Array.isArray(student.attendance) && student.attendance[index] === true); if (!fh || !/^\d{1,2}\/\d{1,2}$/.test(fh)) {} cb.addEventListener('change', handleAttendanceChange); tdCheck.appendChild(cb); }); }); }
+
 async function handleAttendanceChange(event) { const checkbox = event.target; const studentName = checkbox.dataset.studentName; const dateString = checkbox.dataset.date; const isAbsent = checkbox.checked; const selectedSheet = sheetSelect.value; if (!selectedSheet || !dateString || !studentName || !/^\d{1,2}\/\d{1,2}$/.test(dateString)) { showStatus("Erro interno ou data inválida.", true); checkbox.checked = !isAbsent; return; } showStatus(`Atualizando ${studentName} em ${dateString}...`); const payload = { action: "update", sheet: selectedSheet, student: studentName, date: dateString, absent: isAbsent }; try { const response = await fetch(SCRIPT_URL, { method: 'POST', cache: 'no-cache', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload), redirect: 'follow'}); if (!response.ok) { let errorMsg = `Erro HTTP ${response.status}.`; try { const d = await response.json(); if (d && d.message) errorMsg += ` Detalhe: ${d.message}`; } catch(e){} throw new Error(errorMsg); } const result = await response.json(); if (result.status === 'success') { showStatus(result.message || `Status atualizado!`, false); } else { throw new Error(result.message || "Erro ao atualizar."); } } catch (error) { console.error("Erro:", error); showStatus(`Erro: ${error.message}`, true); checkbox.checked = !isAbsent; } }
+
 async function addStudent() { const studentName = newStudentNameInput.value.trim(); const selectedSheet = sheetSelect.value; if (!studentName) { showStatus("Digite o nome.", true); newStudentNameInput.focus(); return; } if (!selectedSheet) { showStatus("Selecione colégio/turma.", true); return; } showLoading(true, `Adicionando ${studentName}...`); showStatus(""); const payload = { action: "addStudent", sheet: selectedSheet, student: studentName }; try { const response = await fetch(SCRIPT_URL, { method: 'POST', cache: 'no-cache', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload), redirect: 'follow' }); if (!response.ok) { throw new Error(`Erro HTTP ${response.status}.`); } const result = await response.json(); if (result.status === 'success') { showStatus(result.message || `Aluno adicionado!`, false); newStudentNameInput.value = ''; loadSheetData(); } else { throw new Error(result.message || "Erro ao adicionar."); } } catch (error) { console.error("Erro:", error); showStatus(`Erro: ${error.message}`, true); } finally { showLoading(false); } }
 // -----------------------------------------------------------------------------
 
@@ -85,7 +142,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         if (!schoolSelect) { console.error("Elemento 'schoolSelect' NÃO encontrado!"); showStatus("Erro crítico: Elemento 'schoolSelect' não encontrado.", true); return; }
         populateSchoolDropdown(); console.log("populateSchoolDropdown chamado.");
         if(schoolSelect) { schoolSelect.addEventListener('change', populateClassDropdown); console.log("Listener 'change' adicionado a schoolSelect."); }
-        // MODIFICADO: Listener do bimesterSelect só carrega dados se uma turma já estiver selecionada.
         if(bimesterSelect) {
              bimesterSelect.addEventListener('change', () => {
                  if (sheetSelect.value) { // Só carrega se uma turma estiver selecionada

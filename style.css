@@ -8,40 +8,63 @@ body {
     background-color: #f4f4f4;
 }
 
-/* --- ESTILO DO HEADER E BOTÃO HAMBURGUER --- */
-/* Estilo opcional para o container do header */
+/* --- ESTILO DO HEADER E BOTÃO HAMBURGUER (AJUSTADO) --- */
 .main-header {
-    display: flex;
-    justify-content: space-between; /* Alinha título à esquerda, botão à direita */
-    align-items: center;
-    margin-bottom: 15px; /* Mantém um espaço abaixo dos controles */
+    position: relative; /* Necessário para posicionar o botão absolutamente dentro dele */
+    text-align: center; /* Centraliza o H1 (que é inline-block ou block) */
+    padding: 10px 0; /* Adiciona algum padding vertical se necessário */
+    margin-bottom: 15px;
 }
 
-h1 { /* Movido para baixo para sobrescrever text-align se necessário */
+h1 {
+    /* color, margin-top, font-size permanecem como antes */
     color: #333;
     margin-top: 10px;
-    margin-bottom: 0; /* Removido se estiver no flex container */
+    margin-bottom: 0; /* Remove margem inferior */
     font-size: 1.8em;
-    text-align: left; /* Garante alinhamento à esquerda no flex container */
-    flex-grow: 1; /* Permite que o título ocupe espaço */
+    display: inline-block; /* Para que o text-align: center do pai funcione bem */
+    /* Remove flex-grow se existia */
+    /* text-align: left; REMOVIDO ou alterado para center se necessário */
 }
 
 #hamburger-menu {
+    position: absolute; /* Posicionamento absoluto relativo ao .main-header */
+    top: 50%; /* Centraliza verticalmente */
+    right: 10px; /* Distância da borda direita (ajuste conforme necessário) */
+    transform: translateY(-50%); /* Ajuste fino para centralização vertical perfeita */
     background: none;
     border: 1px solid #ccc;
-    font-size: 1.5em; /* Tamanho do ícone */
+    font-size: 1.5em;
     cursor: pointer;
-    padding: 0px 8px; /* Ajuste o padding */
+    padding: 0px 8px;
     line-height: 1;
-    height: 36px; /* Altura similar a outros botões/selects */
+    height: 36px;
     min-width: 40px;
-    margin-left: 10px; /* Espaço entre título e botão */
-    flex-shrink: 0; /* Impede que o botão encolha */
+    /* margin-left: 10px; REMOVIDO */
+    /* flex-shrink: 0; REMOVIDO */
 }
 
 #hamburger-menu:hover {
     background-color: #eee;
 }
+/* --- FIM ESTILO HEADER AJUSTADO --- */
+
+/* Ajuste responsivo: Talvez precise ajustar a posição do botão */
+@media (max-width: 700px) {
+     .main-header {
+        /* Mantém position: relative */
+        padding-right: 55px; /* Adiciona espaço à direita para não sobrepor o botão no H1 */
+        /* Alternativa: ajustar 'right' do botão ou o width/margin do H1 */
+    }
+    /* O H1 já deve estar centralizado pelo text-align do pai */
+     #hamburger-menu {
+        right: 5px; /* Aproxima um pouco da borda em telas menores */
+    }
+    /* Restante das regras responsivas */
+     /* ... */
+}
+
+/* Você pode precisar remover/ajustar as regras flexbox anteriores de .main-header e h1 se ainda existirem */
 /* --- FIM ESTILO HEADER --- */
 
 
