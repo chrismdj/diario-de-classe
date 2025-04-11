@@ -10,7 +10,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2DzC7c_qphZTCzJeU8
 const schoolClasses = {
   "CRISTÃO 3R": [
     "C3R_3A", "C3R_3B", "C3R_4A", "C3R_4B", "C3R_5A", "C3R_5B",
-    "C3R_6A", "C3R_6B", "C3R_7A", "C3R_7B", "C3R_8A", "C3R_8B"
+    "C3R_6A", "C3R_6B", "C3R_7A", "C3R_7B", "C3R_8A", "C3R_8B", "C3R_9A",
   ],
   "PAULISTA SANTA BARBARA": [
     "PSB_6A", "PSB_7A", "PSB_8A", "PSB_9A"
