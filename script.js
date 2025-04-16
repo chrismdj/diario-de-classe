@@ -1,5 +1,5 @@
 // ========================================================
-// INÍCIO DO CÓDIGO COMPLETO script.js (vCom Subtítulo Dinâmico)
+// INÍCIO DO CÓDIGO COMPLETO script.js (vCom Correções Finais)
 // ========================================================
 
 // ---------- CONFIGURAÇÃO OBRIGATÓRIA ----------
@@ -35,8 +35,12 @@ const newStudentNameInput = document.getElementById('newStudentName');
 const addStudentButton = document.getElementById('addStudentButton');
 const hamburgerMenu = document.getElementById('hamburger-menu');
 const collapsibleSection = document.getElementById('collapsible-section');
-const subtitleInfo = document.getElementById('subtitle-info'); // <-- ADICIONADO: Referência para Subtítulo
+const subtitleInfo = document.getElementById('subtitle-info');
 // --------------------------
+
+// --- Variável Global para Armazenar Subtítulo ---
+let currentSubtitle = ''; // Armazena o último subtítulo válido
+// ------------------------------------------------
 
 // --- Funções Auxiliares ---
 function showLoading(isLoading, message = "Carregando/Processando...") { loadingElement.textContent = message; loadingElement.style.display = isLoading ? 'block' : 'none'; }
@@ -50,10 +54,11 @@ function populateClassDropdown() {
     const selectedSchool = schoolSelect.value;
     console.log("Colégio selecionado:", selectedSchool);
 
-    // Limpa subtítulo ao trocar escola
-    if (subtitleInfo) subtitleInfo.textContent = '';
+    // Limpa subtítulo e variável ao trocar escola
+    currentSubtitle = '';
+    if (subtitleInfo) subtitleInfo.textContent = currentSubtitle;
 
-    sheetSelect.length = 1; // Limpa opções antigas, mantém a primeira "-- Selecione a Turma --"
+    sheetSelect.length = 1;
     sheetSelect.selectedIndex = 0;
 
     if (selectedSchool && schoolClasses[selectedSchool]) {
@@ -62,7 +67,6 @@ function populateClassDropdown() {
         classes.forEach(sheetName => {
             const option = document.createElement('option');
             option.value = sheetName;
-            // Extrai nome amigável da turma (remove prefixo antes de '_')
             const nameParts = sheetName.split('_');
             const friendlyName = nameParts.length > 1 ? nameParts.slice(1).join('_') : sheetName;
             option.textContent = friendlyName;
@@ -74,7 +78,6 @@ function populateClassDropdown() {
         console.log("Nenhum colégio selecionado ou sem turmas definidas para:", selectedSchool);
         sheetSelect.disabled = true;
     }
-    // Limpa tabela ao trocar escola
     tableHead.innerHTML = '<tr><th></th></tr>';
     tableBody.innerHTML = '<tr><td>Selecione uma turma.</td></tr>';
     showStatus("Selecione uma turma.");
@@ -86,7 +89,7 @@ function populateSchoolDropdown() {
     try {
         const schools = Object.keys(schoolClasses);
         console.log("Colégios encontrados:", schools);
-        schools.sort(); // Ordena nomes das escolas alfabeticamente
+        schools.sort();
         schools.forEach(schoolName => {
             const option = document.createElement('option');
             option.value = schoolName;
@@ -107,26 +110,32 @@ async function loadSheetData() {
     const selectedBimester = bimesterSelect.value;
     if (!selectedSheet) {
         showStatus("Selecione colégio/turma.", true);
-        // Limpa subtítulo se tentar carregar sem turma
-        if (subtitleInfo) subtitleInfo.textContent = '';
+        // Limpa subtítulo e variável se tentar carregar sem turma
+        currentSubtitle = '';
+        if (subtitleInfo) subtitleInfo.textContent = currentSubtitle;
         return;
     }
 
-    // --- ADICIONADO: Recolher controles antes de carregar ---
-    if (collapsibleSection && !collapsibleSection.classList.contains('hidden')) {
-        collapsibleSection.classList.add('hidden');
-        if (hamburgerMenu) { // Atualiza o botão se ele existir
-            hamburgerMenu.textContent = '✕'; // Ícone de Fechar (Xis)
-            hamburgerMenu.setAttribute('aria-label', 'Mostrar Controles');
-        }
-        console.log("Controles recolhidos automaticamente.");
-    }
-    // --- FIM DA ADIÇÃO ---
+    // --- Recolher controles antes de carregar (LÓGICA CORRIGIDA ABAIXO) ---
+    // Movido para DENTRO do listener do botão para evitar dupla execução
+    let autoCollapsed = false; // Flag para saber se foi recolhido aqui
+     if (collapsibleSection && !collapsibleSection.classList.contains('hidden')) {
+         collapsibleSection.classList.add('hidden');
+         if (hamburgerMenu) {
+             // Ícone CORRIGIDO: Mostra 'Expandir' (☰) quando fecha automaticamente
+             hamburgerMenu.textContent = '☰';
+             hamburgerMenu.setAttribute('aria-label', 'Expandir Controles');
+         }
+         console.log("Controles recolhidos automaticamente.");
+         autoCollapsed = true; // Marca que foi recolhido
+     }
+    // --- FIM ---
 
     showLoading(true, `Carregando ${selectedSheet}...`);
-    showStatus(""); // Limpa status anterior
-    // Limpa subtítulo antes de carregar novos dados
-    if (subtitleInfo) subtitleInfo.textContent = '';
+    showStatus("");
+    // Limpa subtítulo e variável antes de carregar novos dados
+    currentSubtitle = '';
+    if (subtitleInfo) subtitleInfo.textContent = currentSubtitle;
 
     tableHead.innerHTML = '<tr><th>Carregando...</th></tr>';
     tableBody.innerHTML = '<tr><td>Carregando...</td></tr>';
@@ -150,22 +159,23 @@ async function loadSheetData() {
 
         renderAttendanceTable(data.headers, data.students);
 
-        // --- ADICIONADO: Define o subtítulo após sucesso ---
+        // --- Define e ARMAZENA o subtítulo após sucesso ---
         const schoolName = schoolSelect.options[schoolSelect.selectedIndex].text;
         const className = sheetSelect.options[sheetSelect.selectedIndex].text;
         if (subtitleInfo && schoolName && className && schoolName !== '-- Selecione o Colégio --' && className !== '-- Selecione a Turma --') {
-            subtitleInfo.textContent = `${schoolName} - ${className}`;
+            currentSubtitle = `${schoolName} - ${className}`; // Armazena
+            subtitleInfo.textContent = currentSubtitle; // Mostra
+        } else {
+            currentSubtitle = ''; // Limpa se seleção for inválida
+             if (subtitleInfo) subtitleInfo.textContent = currentSubtitle;
         }
-        // --- FIM DA ADIÇÃO DO SUBTÍTULO ---
+        // --- FIM DA DEFINIÇÃO E ARMAZENAMENTO DO SUBTÍTULO ---
 
         showStatus(data.students.length > 0 ? "Dados carregados." : "Dados carregados (sem alunos).", false);
-        if (data.message && data.students.length > 0) {
-            showStatus(updateStatusElement.textContent + " | Aviso: " + data.message, false);
-        } else if (data.message) {
-            showStatus("Aviso: " + data.message, false);
-        }
+        if (data.message && data.students.length > 0) { showStatus(updateStatusElement.textContent + " | Aviso: " + data.message, false); }
+        else if (data.message) { showStatus("Aviso: " + data.message, false); }
 
-        // Scroll para o final (acontece DEPOIS de renderizar e definir subtítulo)
+        // Scroll para o final
         setTimeout(() => {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             console.log("Scrolled to bottom.");
@@ -176,8 +186,9 @@ async function loadSheetData() {
         showStatus(`Erro ao carregar: ${error.message}`, true);
         tableHead.innerHTML = '<tr><th>Erro</th></tr>';
         tableBody.innerHTML = '<tr><td>Não foi possível carregar.</td></tr>';
-        // Limpa subtítulo em caso de erro
-        if (subtitleInfo) subtitleInfo.textContent = '';
+        // Limpa subtítulo e variável em caso de erro
+        currentSubtitle = '';
+        if (subtitleInfo) subtitleInfo.textContent = currentSubtitle;
     } finally {
         showLoading(false);
     }
@@ -194,15 +205,16 @@ async function addStudent() { const studentName = newStudentNameInput.value.trim
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log("DOM carregado. Iniciando configuração...");
     try {
-        // Limpa subtítulo na inicialização
-        if (subtitleInfo) subtitleInfo.textContent = '';
+        // Limpa subtítulo e variável na inicialização
+        currentSubtitle = '';
+        if (subtitleInfo) subtitleInfo.textContent = currentSubtitle;
 
         if (!schoolSelect) { console.error("Elemento 'schoolSelect' NÃO encontrado!"); showStatus("Erro crítico: Elemento 'schoolSelect' não encontrado.", true); return; }
         populateSchoolDropdown(); console.log("populateSchoolDropdown chamado.");
         if(schoolSelect) { schoolSelect.addEventListener('change', populateClassDropdown); console.log("Listener 'change' adicionado a schoolSelect."); }
         if(bimesterSelect) {
              bimesterSelect.addEventListener('change', () => {
-                 if (sheetSelect.value) { // Só carrega se uma turma estiver selecionada
+                 if (sheetSelect.value) {
                      loadSheetData();
                  }
              });
@@ -211,29 +223,34 @@ window.addEventListener('DOMContentLoaded', (event) => {
         if(loadSheetButton) { loadSheetButton.addEventListener('click', loadSheetData); console.log("Listener 'click' adicionado a loadSheetButton."); }
         if(addStudentButton) { addStudentButton.addEventListener('click', addStudent); console.log("Listener 'click' adicionado a addStudentButton."); }
 
-        // --- LÓGICA DO MENU HAMBURGUER E SUBTÍTULO ---
+        // --- LÓGICA DO MENU HAMBURGUER E SUBTÍTULO (CORRIGIDA) ---
         if (hamburgerMenu && collapsibleSection) {
             hamburgerMenu.addEventListener('click', () => {
-                collapsibleSection.classList.toggle('hidden');
+                const isHidden = collapsibleSection.classList.toggle('hidden'); // Toggle retorna true se a classe FOI ADICIONADA (ficou hidden)
 
-                if (collapsibleSection.classList.contains('hidden')) {
-                    // Menu fechado (controles escondidos)
-                    hamburgerMenu.textContent = '✕'; // Ícone de Fechar (Xis)
-                    hamburgerMenu.setAttribute('aria-label', 'Mostrar Controles');
-                    // O subtítulo deve permanecer visível se já foi definido
+                if (isHidden) {
+                    // Seção ficou ESCONDIDA (Recolheu)
+                    hamburgerMenu.textContent = '☰'; // Ícone para EXPANDIR
+                    hamburgerMenu.setAttribute('aria-label', 'Expandir Controles');
+                    // Restaura o subtítulo que estava armazenado
+                     if (subtitleInfo) subtitleInfo.textContent = currentSubtitle;
                 } else {
-                    // Menu aberto (controles visíveis)
-                    hamburgerMenu.textContent = '☰'; // Ícone de Hambúrguer
-                    hamburgerMenu.setAttribute('aria-label', 'Ocultar Controles');
-                    // Limpa o subtítulo ao expandir o menu
+                    // Seção ficou VISÍVEL (Expandiu)
+                    hamburgerMenu.textContent = '✕'; // Ícone para RECOLHER
+                    hamburgerMenu.setAttribute('aria-label', 'Recolher Controles');
+                    // Limpa o subtítulo ao expandir
                     if (subtitleInfo) subtitleInfo.textContent = '';
                 }
             });
+             // Define estado inicial do botão (começa visível)
+             hamburgerMenu.textContent = '✕';
+             hamburgerMenu.setAttribute('aria-label', 'Recolher Controles');
+
             console.log("Listener 'click' adicionado a hamburgerMenu.");
         } else {
              console.error("Erro: Elemento hamburgerMenu ou collapsibleSection não encontrado!");
         }
-        // --- FIM DA LÓGICA DO MENU HAMBURGUER E SUBTÍTULO ---
+        // --- FIM DA LÓGICA ---
 
         showStatus("Selecione um colégio para ver as turmas.");
         console.log("Configuração inicial concluída.");
