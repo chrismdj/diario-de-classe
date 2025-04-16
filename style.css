@@ -8,33 +8,47 @@ body {
     background-color: #f4f4f4;
 }
 
-/* --- ESTILO DO HEADER (CORRIGIDO PARA CENTRALIZAR H1) --- */
+/* --- ESTILO DO HEADER (Layout Flexbox: Logo | Título | Botão) --- */
 .main-header {
-    position: relative; /* Base para posicionamento absoluto do botão */
-    padding: 10px 0; /* Padding vertical */
+    display: flex; /* Usa Flexbox */
+    align-items: center; /* Alinha itens verticalmente */
+    justify-content: space-between; /* Espaça itens (logo na ponta, botão na outra) */
+    padding: 5px 0; /* Padding vertical menor */
     margin-bottom: 5px; /* Espaço antes do subtítulo */
-    /* Largura total é implícita para um div */
+    gap: 10px; /* Espaço entre os itens flex */
+    /* position: relative; NÃO MAIS NECESSÁRIO */
 }
+
+#school-logo {
+    display: block; /* Garante que seja um bloco */
+    height: 40px; /* Altura fixa para o logo */
+    width: auto; /* Largura ajusta para manter proporção */
+    max-width: 100px; /* Limite máximo de largura se necessário */
+    object-fit: contain; /* Garante que a imagem caiba sem distorcer */
+    flex-shrink: 0; /* Impede que o logo encolha */
+}
+
+/* Esconde o elemento IMG se o SRC estiver vazio ou não definido */
+#school-logo[src=""],
+#school-logo:not([src]) {
+    display: none;
+}
+
 
 h1 {
     color: #333;
-    margin-top: 10px;
-    margin-bottom: 0;
     font-size: 1.8em;
-    display: block; /* Garante que o H1 ocupe a linha */
-    width: calc(100% - 80px); /* Tenta dar espaço para o botão não sobrepor (ajuste 80px se necessário) */
-    margin-left: auto; /* Centraliza o bloco do H1 */
-    margin-right: auto; /* Centraliza o bloco do H1 */
-    text-align: center; /* Centraliza o texto DENTRO do bloco H1 */
-    padding: 0 10px; /* Evita que texto encoste nas bordas se for longo */
-    box-sizing: border-box;
+    text-align: center; /* Centraliza o texto DENTRO do H1 */
+    margin: 10px 0 0; /* Margem superior, remove laterais e inferior */
+    padding: 0 5px; /* Pequeno padding lateral */
+    flex-grow: 1; /* Faz o H1 ocupar o espaço disponível entre logo e botão */
+    /* display: block; NÃO MAIS NECESSÁRIO com flex */
+    /* width: calc(...); NÃO MAIS NECESSÁRIO */
 }
 
 #hamburger-menu {
-    position: absolute;
-    top: 50%;
-    right: 10px; /* Distância da borda direita */
-    transform: translateY(-50%);
+    /* position: absolute; REMOVIDO */
+    /* top, right, transform REMOVIDOS */
     background: none;
     border: 1px solid #ccc;
     font-size: 1.5em;
@@ -43,7 +57,8 @@ h1 {
     line-height: 1;
     height: 36px;
     min-width: 40px;
-    z-index: 15; /* Garante que fique acima do H1 se houver sobreposição */
+    flex-shrink: 0; /* Impede que o botão encolha */
+    /* z-index: 15; NÃO MAIS NECESSÁRIO */
 }
 
 #hamburger-menu:hover {
@@ -51,15 +66,15 @@ h1 {
 }
 /* --- FIM ESTILO HEADER --- */
 
-/* --- ESTILO DO SUBTÍTULO (AJUSTADO) --- */
+/* --- ESTILO DO SUBTÍTULO --- */
 #subtitle-info {
-    font-size: 0.9em; /* Ligeiramente maior */
-    color: #555; /* Tom de cinza escuro */
+    font-size: 0.9em;
+    color: #555;
     text-align: center;
-    margin-top: -5px; /* Aproxima mais do título */
+    margin-top: -5px;
     margin-bottom: 15px;
     min-height: 1.2em;
-    font-weight: bold; /* <<< EM NEGRITO */
+    font-weight: bold;
     padding: 0 10px;
     word-wrap: break-word;
 }
@@ -224,16 +239,10 @@ h1 {
 
 /* === Media Queries === */
 @media (max-width: 700px) {
-    h1 {
-        width: calc(100% - 60px); /* Ajusta largura do H1 para telas menores */
-        font-size: 1.6em; /* Mantém redução anterior */
-    }
-    #hamburger-menu {
-        right: 5px; /* Mantém botão próximo da borda */
-    }
-    #subtitle-info {
-         font-size: 0.85em; /* Pode reduzir um pouco mais se necessário */
-    }
+    h1 { font-size: 1.6em; } /* Mantém redução anterior */
+    #school-logo { height: 35px; } /* Reduz logo em telas menores */
+    #hamburger-menu { font-size: 1.4em; height: 34px; } /* Reduz botão */
+    #subtitle-info { font-size: 0.85em; }
 
     /* Restante das regras responsivas */
     .controls { padding: 8px; gap: 8px; align-items: stretch; }
@@ -254,13 +263,9 @@ h1 {
     .management-controls button { width: 100%; margin-top: 5px; }
 }
 @media (max-width: 400px) {
-    h1 {
-        width: calc(100% - 50px); /* Ajusta mais a largura do H1 */
-        font-size: 1.4em; /* Mantém redução anterior */
-    }
-     #hamburger-menu {
-        /* Mantém ajustes anteriores */
-    }
+    h1 { font-size: 1.3em; margin-top: 12px;} /* Reduzir mais e ajustar margem */
+    #school-logo { height: 30px; } /* Logo ainda menor */
+    #hamburger-menu { font-size: 1.3em; height: 32px; }
     #subtitle-info { font-size: 0.8em; }
 
     .control-group { min-width: 100%; flex-basis: 100%; }
