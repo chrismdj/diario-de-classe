@@ -10,30 +10,24 @@ body {
 
 /* --- ESTILO DO HEADER (Título Centralizado Absolutamente) --- */
 .main-header {
-    position: relative; /* Base para posicionamento absoluto */
-    padding: 10px 0; /* Padding vertical */
-    margin-bottom: 5px; /* Espaço antes do subtítulo */
-    min-height: 50px; /* Garante altura mínima para conter logo/botão */
-    /* display: flex; REMOVIDO */
-    /* align-items: center; REMOVIDO */
-    /* justify-content: space-between; REMOVIDO */
-    /* gap: 10px; REMOVIDO */
+    position: relative;
+    padding: 10px 0;
+    margin-bottom: 5px;
+    min-height: 50px;
 }
 
 #school-logo {
-    position: absolute; /* Posicionado à esquerda */
-    left: 10px; /* Distância da esquerda */
-    top: 50%; /* Centralizado verticalmente */
-    transform: translateY(-50%); /* Ajuste fino vertical */
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     display: block;
     height: 40px;
     width: auto;
     max-width: 100px;
     object-fit: contain;
-    /* flex-shrink: 0; REMOVIDO */
 }
 
-/* Esconde o elemento IMG se o SRC estiver vazio ou não definido */
 #school-logo[src=""],
 #school-logo:not([src]) {
     display: none;
@@ -43,20 +37,17 @@ body {
 h1 {
     color: #333;
     font-size: 1.8em;
-    text-align: center; /* Centraliza o texto */
-    margin: 10px auto 0; /* Margem superior, centraliza horizontalmente, sem margem inferior */
-    padding: 0 60px; /* Adiciona padding LATERAL para evitar que texto longo fique SOB o logo/botão. Ajuste 60px conforme necessário. */
-    box-sizing: border-box; /* Garante que padding não aumente a largura total */
-    /* display: block; (Já é block por padrão) */
-    /* flex-grow: 1; REMOVIDO */
-    /* width: etc REMOVIDO */
+    text-align: center;
+    margin: 10px auto 0;
+    padding: 0 60px; /* Espaço para logo/botão */
+    box-sizing: border-box;
 }
 
 #hamburger-menu {
-    position: absolute; /* Posicionado à direita */
-    right: 10px; /* Distância da direita */
-    top: 50%; /* Centralizado verticalmente */
-    transform: translateY(-50%); /* Ajuste fino vertical */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     background: none;
     border: 1px solid #ccc;
     font-size: 1.5em;
@@ -65,9 +56,7 @@ h1 {
     line-height: 1;
     height: 36px;
     min-width: 40px;
-    z-index: 15; /* Garante que fique acima */
-    /* flex-shrink: 0; REMOVIDO */
-    /* margin-left: 10px; REMOVIDO */
+    z-index: 15;
 }
 
 #hamburger-menu:hover {
@@ -195,15 +184,23 @@ h1 {
 #attendanceTable th,
 #attendanceTable td {
     border: none;
-    padding: 5px 6px;
+    /* Padding: Top/Bottom=8px (AUMENTADO), Left/Right=6px */
+    padding: 8px 6px; /* <<< AJUSTADO PARA AUMENTAR ALTURA DA LINHA */
     text-align: center;
     white-space: nowrap;
     font-size: 0.85em;
     border-bottom: 1px solid #eee;
     border-right: 1px solid #eee;
+    vertical-align: middle; /* Garante alinhamento vertical no centro */
 }
 #attendanceTable td:last-child, #attendanceTable th:last-child { border-right: none; }
 #attendanceTable tr:last-child td { border-bottom: none; }
+
+/* <<< NOVA REGRA PARA LARGURA DAS COLUNAS DE DATA >>> */
+#attendanceTable th:not(:first-child),
+#attendanceTable td:not(:first-child) {
+    min-width: 45px; /* Define largura mínima (ajuste conforme necessário) */
+}
 
 #attendanceTable thead th {
     background-color: #D9534F;
@@ -211,23 +208,24 @@ h1 {
     font-weight: bold;
     position: sticky; top: 0; z-index: 10;
     border-bottom: 2px solid #a94442;
-    border-right: 1px solid #a94442;
+    border-right: 1px solid #a94442; /* Mantido para consistência */
 }
 
 #attendanceTable thead th:first-child {
     position: sticky; left: 0;
-    background-color: #D9534F;
+    background-color: #D9534F; /* Mantém fundo */
     color: #ffffff;
     z-index: 11;
     font-weight: bold;
-    border-right: 2px solid #a94442;
+    border-right: 2px solid #a94442; /* Borda direita mais forte no cabeçalho do nome */
 }
 
   #attendanceTable thead th:first-child,
   #attendanceTable tbody td:first-child {
     position: sticky; left: 0; min-width: 130px; max-width: 220px; text-align: left;
     overflow: hidden; text-overflow: ellipsis;
-    border-right: 2px solid #ccc;
+    /* Borda direita da coluna de nome */
+    border-right: 2px solid #ccc; /* Mantém separador claro */
   }
   #attendanceTable tbody td:first-child {
       background-color: #f0f0f0;
@@ -248,21 +246,11 @@ h1 {
 
 /* === Media Queries === */
 @media (max-width: 700px) {
-    h1 {
-        font-size: 1.6em; /* Mantém redução anterior */
-        padding: 0 50px; /* Garante padding mesmo em telas menores */
-    }
-    #school-logo {
-        height: 35px; /* Mantém redução anterior */
-        left: 5px; /* Aproxima da borda */
-     }
-    #hamburger-menu {
-        font-size: 1.4em; height: 34px; /* Mantém redução anterior */
-        right: 5px; /* Aproxima da borda */
-    }
+    h1 { font-size: 1.6em; padding: 0 50px; }
+    #school-logo { height: 35px; left: 5px; }
+    #hamburger-menu { font-size: 1.4em; height: 34px; right: 5px; }
     #subtitle-info { font-size: 0.85em; }
 
-    /* Restante das regras responsivas */
     .controls { padding: 8px; gap: 8px; align-items: stretch; }
     .control-group { min-width: calc(50% - 4px); flex-basis: calc(50% - 4px); flex-grow: 0; }
     .control-group label { font-size: 0.85em; }
@@ -271,23 +259,22 @@ h1 {
 
     .management-controls { padding: 8px; }
     .management-controls .control-group {
-        flex-direction: column;
-        align-items: stretch;
-        flex-basis: 100%;
-        gap: 5px;
+        flex-direction: column; align-items: stretch; flex-basis: 100%; gap: 5px;
     }
     .management-controls label { margin-right: 0; margin-bottom: 3px; }
     .management-controls input[type="text"] { width: 100%; }
     .management-controls button { width: 100%; margin-top: 5px; }
 }
 @media (max-width: 400px) {
-    h1 {
-        font-size: 1.3em; margin-top: 12px; /* Mantém redução anterior */
-        padding: 0 45px; /* Ajusta padding para botão/logo */
-    }
-    #school-logo { height: 30px; } /* Mantém redução anterior */
-    #hamburger-menu { font-size: 1.3em; height: 32px; } /* Mantém redução anterior */
+    h1 { font-size: 1.3em; margin-top: 12px; padding: 0 45px; }
+    #school-logo { height: 30px; }
+    #hamburger-menu { font-size: 1.3em; height: 32px; }
     #subtitle-info { font-size: 0.8em; }
+
+    #attendanceTable th, #attendanceTable td { padding: 6px 4px; } /* Reduz padding lateral em tela muito pequena */
+    #attendanceTable th:not(:first-child),
+    #attendanceTable td:not(:first-child) { min-width: 40px; } /* Pode reduzir min-width */
+
 
     .control-group { min-width: 100%; flex-basis: 100%; }
     .control-group button#loadSheetButton { width: 100%; }
