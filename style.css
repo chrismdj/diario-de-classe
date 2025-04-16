@@ -8,30 +8,27 @@ body {
     background-color: #f4f4f4;
 }
 
-/* --- ESTILO DO HEADER E BOTÃO HAMBURGUER (AJUSTADO) --- */
+/* --- ESTILO DO HEADER E BOTÃO HAMBURGUER (AJUSTADO PARA TÍTULO CENTRALIZADO) --- */
 .main-header {
-    position: relative; /* Necessário para posicionar o botão absolutamente dentro dele */
-    text-align: center; /* Centraliza o H1 (que é inline-block ou block) */
-    padding: 10px 0; /* Adiciona algum padding vertical se necessário */
-    margin-bottom: 15px;
+    position: relative; /* Necessário para posicionar o botão absolutamente */
+    text-align: center; /* Centraliza o H1 */
+    padding: 10px 0;
+    margin-bottom: 5px; /* Espaço antes do subtítulo */
 }
 
 h1 {
-    /* color, margin-top, font-size permanecem como antes */
     color: #333;
     margin-top: 10px;
-    margin-bottom: 0; /* Remove margem inferior */
+    margin-bottom: 0;
     font-size: 1.8em;
-    display: inline-block; /* Para que o text-align: center do pai funcione bem */
-    /* Remove flex-grow se existia */
-    /* text-align: left; REMOVIDO ou alterado para center se necessário */
+    display: inline-block; /* Importante para text-align center funcionar bem */
 }
 
 #hamburger-menu {
     position: absolute; /* Posicionamento absoluto relativo ao .main-header */
     top: 50%; /* Centraliza verticalmente */
-    right: 10px; /* Distância da borda direita (ajuste conforme necessário) */
-    transform: translateY(-50%); /* Ajuste fino para centralização vertical perfeita */
+    right: 10px; /* Distância da borda direita */
+    transform: translateY(-50%); /* Ajuste fino vertical */
     background: none;
     border: 1px solid #ccc;
     font-size: 1.5em;
@@ -40,32 +37,26 @@ h1 {
     line-height: 1;
     height: 36px;
     min-width: 40px;
-    /* margin-left: 10px; REMOVIDO */
-    /* flex-shrink: 0; REMOVIDO */
 }
 
 #hamburger-menu:hover {
     background-color: #eee;
 }
-/* --- FIM ESTILO HEADER AJUSTADO --- */
-
-/* Ajuste responsivo: Talvez precise ajustar a posição do botão */
-@media (max-width: 700px) {
-     .main-header {
-        /* Mantém position: relative */
-        padding-right: 55px; /* Adiciona espaço à direita para não sobrepor o botão no H1 */
-        /* Alternativa: ajustar 'right' do botão ou o width/margin do H1 */
-    }
-    /* O H1 já deve estar centralizado pelo text-align do pai */
-     #hamburger-menu {
-        right: 5px; /* Aproxima um pouco da borda em telas menores */
-    }
-    /* Restante das regras responsivas */
-     /* ... */
-}
-
-/* Você pode precisar remover/ajustar as regras flexbox anteriores de .main-header e h1 se ainda existirem */
 /* --- FIM ESTILO HEADER --- */
+
+/* --- ESTILO DO SUBTÍTULO --- */
+#subtitle-info {
+    font-size: 0.85em;
+    color: #667;
+    text-align: center;
+    margin-top: -8px; /* Aproxima do título */
+    margin-bottom: 15px; /* Espaço antes dos controles/status */
+    min-height: 1.1em; /* Evita pulo de layout */
+    font-weight: normal;
+    padding: 0 10px;
+    word-wrap: break-word;
+}
+/* --- FIM ESTILO SUBTÍTULO --- */
 
 
 .controls {
@@ -126,22 +117,22 @@ h1 {
 
   .management-controls {
       background-color: #e9ecef;
-      align-items: stretch; /* Alterado de flex-end para stretch */
-      /* Removido margin-bottom se ele for o último dentro de collapsible-section */
-      margin-bottom: 0;
+      align-items: stretch;
+      margin-bottom: 0; /* Remove margin se for último dentro de collapsible */
   }
   .management-controls .control-group {
       flex-direction: row;
-      align-items: center; /* Mudado de stretch para center para alinhar label/input/button */
+      align-items: center;
       flex-basis: auto;
       min-width: 0;
-      gap: 5px; /* Adicionado gap entre label, input, button */
+      gap: 5px;
   }
    .management-controls .control-group.full-width-mobile {
       flex-basis: 100%;
   }
   .management-controls label {
-       margin-bottom: 0; margin-right: 0; /* Removido margin-right */
+       margin-bottom: 0;
+       margin-right: 0;
        width: auto; flex-shrink: 0;
   }
    .management-controls input[type="text"] {
@@ -153,8 +144,7 @@ h1 {
 
 /* --- ESTILO PARA ESCONDER A SEÇÃO --- */
 #collapsible-section {
-    /* Adicione transições se quiser animar (requer mudar de display:none) */
-    margin-bottom: 15px; /* Adiciona espaço abaixo da seção inteira */
+    margin-bottom: 15px; /* Espaço abaixo da seção inteira quando visível */
 }
 #collapsible-section.hidden {
     display: none;
@@ -168,7 +158,7 @@ h1 {
 #updateStatus.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
 /* --- ESTILOS DA TABELA AJUSTADOS --- */
-.table-container { width: 100%; overflow-x: auto; background-color: #fff; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 15px; max-height: 70vh; /* Ajuste conforme necessário */ overflow-y: auto; }
+.table-container { width: 100%; overflow-x: auto; background-color: #fff; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 15px; max-height: 70vh; overflow-y: auto; }
 #attendanceTable { border-collapse: collapse; width: 100%; }
 
 #attendanceTable th,
@@ -178,72 +168,62 @@ h1 {
     text-align: center;
     white-space: nowrap;
     font-size: 0.85em;
-    border-bottom: 1px solid #eee; /* Linha divisória mais sutil */
+    border-bottom: 1px solid #eee;
     border-right: 1px solid #eee;
 }
 #attendanceTable td:last-child, #attendanceTable th:last-child { border-right: none; }
 #attendanceTable tr:last-child td { border-bottom: none; }
 
-/* --- CABEÇALHO DA TABELA MODIFICADO (FUNDO VERMELHO) --- */
 #attendanceTable thead th {
     background-color: #D9534F;
     color: #ffffff;
     font-weight: bold;
     position: sticky; top: 0; z-index: 10;
-    border-bottom: 2px solid #a94442; /* Borda inferior mais forte */
+    border-bottom: 2px solid #a94442;
     border-right: 1px solid #a94442;
 }
 
-  /* Coluna fixa do nome - AJUSTAR FUNDO/COR */
 #attendanceTable thead th:first-child {
     position: sticky; left: 0;
     background-color: #D9534F;
     color: #ffffff;
-    z-index: 11; /* Acima dos outros cabeçalhos */
+    z-index: 11;
     font-weight: bold;
-    border-right: 2px solid #a94442; /* Separador direito mais forte */
+    border-right: 2px solid #a94442;
 }
-  /* ====================================== */
 
-  /* Estilos gerais da primeira coluna (posicionamento/tamanho) */
   #attendanceTable thead th:first-child,
   #attendanceTable tbody td:first-child {
     position: sticky; left: 0; min-width: 130px; max-width: 220px; text-align: left;
     overflow: hidden; text-overflow: ellipsis;
-    border-right: 2px solid #ccc; /* Separador direito claro */
+    border-right: 2px solid #ccc;
   }
-  #attendanceTable tbody td:first-child { /* Célula do nome no CORPO da tabela */
-      background-color: #f0f0f0; /* Fundo cinza claro */
+  #attendanceTable tbody td:first-child {
+      background-color: #f0f0f0;
       z-index: 5;
-      font-weight: bold; /* NOME DO ALUNO EM NEGRITO */
+      font-weight: bold;
       font-size: 0.85em;
   }
 #attendanceTable tbody tr:last-child td:first-child { border-bottom: none; }
 
 
 #attendanceTable tbody tr:nth-child(even) td:not(:first-child) { background-color: #f9f9f9; }
-#attendanceTable tbody tr:nth-child(even) td:first-child { background-color: #e9e9e9; } /* Cor ligeiramente diferente para nome em linha par */
+#attendanceTable tbody tr:nth-child(even) td:first-child { background-color: #e9e9e9; }
 
 #attendanceTable tbody tr:hover td:not(:first-child) { background-color: #e9e9e9; }
-#attendanceTable tbody tr:hover td:first-child { background-color: #e0e0e0; } /* Hover mais escuro para nome */
+#attendanceTable tbody tr:hover td:first-child { background-color: #e0e0e0; }
 
 #attendanceTable input[type="checkbox"] { cursor: pointer; transform: scale(1.0); vertical-align: middle; margin: 0; display: block; margin-left: auto; margin-right: auto; }
 
 /* === Media Queries === */
 @media (max-width: 700px) {
-    /* Ajuste opcional para header responsivo */
+    /* Ajuste header responsivo */
     .main-header {
-        flex-direction: column; /* Empilha título e botão */
-        align-items: flex-start; /* Alinha ambos à esquerda */
-    }
-    h1 {
-        text-align: center; /* Centraliza H1 no modo coluna */
-        width: 100%; /* Faz H1 ocupar a largura */
-        margin-bottom: 10px; /* Adiciona espaço abaixo do H1 */
+        padding-right: 50px; /* Espaço para botão absoluto */
+        padding-left: 5px; /* Evita que título encoste na esquerda */
     }
     #hamburger-menu {
-        /* margin-top: 5px; Espaço entre título e botão */
-        align-self: flex-end; /* Coloca o botão à direita no modo coluna */
+        right: 5px; /* Botão mais próximo da borda */
     }
     /* Fim ajuste header responsivo */
 
@@ -253,21 +233,23 @@ h1 {
     .control-group select, .control-group button { padding: 6px 8px; font-size: 0.9em; }
     .control-group button#loadSheetButton { flex-grow: 1; min-width: 100px; width: auto; }
 
-    .management-controls { padding: 8px; } /* Padding igual aos outros controles */
+    .management-controls { padding: 8px; }
     .management-controls .control-group {
-        flex-direction: column; /* Empilha label, input, button */
-        align-items: stretch; /* Estica elementos */
+        flex-direction: column;
+        align-items: stretch;
         flex-basis: 100%;
-        gap: 5px; /* Espaço entre elementos empilhados */
+        gap: 5px;
     }
     .management-controls label { margin-right: 0; margin-bottom: 3px; }
     .management-controls input[type="text"] { width: 100%; }
     .management-controls button { width: 100%; margin-top: 5px; }
-    h1 { font-size: 1.6em; } /* Reduzido no CSS original */
+    h1 { font-size: 1.6em; }
 }
 @media (max-width: 400px) {
     .control-group { min-width: 100%; flex-basis: 100%; }
     .control-group button#loadSheetButton { width: 100%; }
-    /* O management-controls já está 100% width no media query anterior */
+    .main-header { padding-right: 45px; /* Mais espaço ainda se necessário */ }
+    h1 { font-size: 1.4em; } /* Reduzir mais o título se necessário */
+    #subtitle-info { font-size: 0.8em; }
 }
 /* ======================================================== */
