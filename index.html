@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chamada</title> <meta name="theme-color" content="#007bff">
+    <title>Chamada</title>
+    <meta name="theme-color" content="#007bff">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
@@ -13,10 +14,12 @@
 <body>
 
     <div class="main-header">
-        <img id="school-logo" src="" alt="Logo do Colégio"> <h1>Chamada</h1> <button id="hamburger-menu" aria-label="Recolher Controles">✕</button> </div>
+        <img id="school-logo" src="" alt="Logo do Colégio">
+        <h1>Chamada</h1>
+        <button id="hamburger-menu" aria-label="Recolher Controles">✕</button>
+    </div>
     <p id="subtitle-info"></p>
-
-    <div id="collapsible-section">
+    <button id="content-edit-button" disabled>Registrar Conteúdo do Dia</button> <div id="collapsible-section">
         <div class="controls">
             <div class="control-group">
                 <label for="schoolSelect">Colégio:</label>
@@ -66,6 +69,23 @@
         </table>
     </div>
 
+    <div id="modal-backdrop" class="modal-backdrop"></div> <div id="content-modal" class="modal">
+        <button id="close-modal-button" class="modal-close-btn" aria-label="Fechar">&times;</button>
+        <h3>Conteúdo do Dia</h3>
+        <div class="modal-content">
+            <div class="control-group">
+                <label for="content-date-select">Data:</label>
+                <select id="content-date-select">
+                    <option value="">-- Selecione a Data --</option>
+                    </select>
+            </div>
+            <div class="control-group">
+                <label for="content-textarea">Conteúdo Programático:</label>
+                <textarea id="content-textarea" rows="4" placeholder="Digite o conteúdo aqui..."></textarea>
+            </div>
+            <button id="save-content-button">Salvar Conteúdo</button>
+            <div id="content-save-status" class="status-message-inline"></div> </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
