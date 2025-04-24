@@ -6,6 +6,8 @@ body {
     padding: 10px;
     margin: 0 auto;
     background-color: #f4f4f4;
+    /* Importante: Garante que não haja transforms estranhos no body */
+    transform: none !important;
 }
 
 /* --- ESTILO DO HEADER (Título Centralizado Absolutamente) --- */
@@ -45,97 +47,48 @@ h1 {
 
 /* --- ESTILO BOTÃO REGISTRAR CONTEÚDO --- */
 #content-edit-button {
-    display: block; /* Ocupa a largura disponível */
-    width: calc(100% - 20px); /* Largura total menos padding da body */
-    max-width: 300px; /* Limita largura em telas maiores */
-    margin: 0 auto 15px auto; /* Centraliza e adiciona margem inferior */
-    padding: 8px 15px;
-    font-size: 0.9em;
-    font-weight: bold;
-    color: #fff;
-    background-color: #28a745; /* Verde */
-    border: 1px solid #218838;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.2s ease;
+    display: block; width: calc(100% - 20px); max-width: 300px; margin: 0 auto 15px auto;
+    padding: 8px 15px; font-size: 0.9em; font-weight: bold; color: #fff;
+    background-color: #28a745; border: 1px solid #218838; border-radius: 4px;
+    cursor: pointer; text-align: center; transition: background-color 0.2s ease;
 }
-#content-edit-button:hover:not(:disabled) {
-    background-color: #218838;
-}
-#content-edit-button:disabled {
-    background-color: #cccccc;
-    border-color: #aaaaaa;
-    color: #666666;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
+#content-edit-button:hover:not(:disabled) { background-color: #218838; }
+#content-edit-button:disabled { background-color: #cccccc; border-color: #aaaaaa; color: #666666; cursor: not-allowed; opacity: 0.7; }
 /* --- FIM ESTILO BOTÃO --- */
 
 
-.controls {
-    background-color: #fff; padding: 10px; margin-bottom: 15px; border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; gap: 8px 10px;
-    align-items: flex-end; flex-wrap: wrap;
-}
-  .control-group {
-      display: flex; flex-direction: column; gap: 3px; flex-grow: 1;
-      flex-basis: 100px; min-width: 100px;
-  }
-   .control-group button#loadSheetButton { min-width: auto; flex-grow: 0; padding-left: 15px; padding-right: 15px; }
-
-.controls label { font-weight: bold; font-size: 0.9em; margin-bottom: 2px; display: block; }
-
+.controls { /* ... estilos iguais ... */ background-color: #fff; padding: 10px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; gap: 8px 10px; align-items: flex-end; flex-wrap: wrap; }
+  .control-group { /* ... estilos iguais ... */ display: flex; flex-direction: column; gap: 3px; flex-grow: 1; flex-basis: 100px; min-width: 100px; }
+   .control-group button#loadSheetButton { /* ... estilos iguais ... */ min-width: auto; flex-grow: 0; padding-left: 15px; padding-right: 15px; }
+.controls label { /* ... estilos iguais ... */ font-weight: bold; font-size: 0.9em; margin-bottom: 2px; display: block; }
 .controls select, .controls button, .management-controls input[type="text"],
 .management-controls button,
-/* Aplica estilo base aos elementos do modal também */
-#content-modal select, #content-modal textarea, #content-modal button#save-content-button {
-    padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em;
-    width: 100%; box-sizing: border-box; height: 36px; /* Altura base */
-}
-#content-modal textarea { /* Ajuste para textarea */
-    height: auto; /* Altura automática baseada nas linhas */
-    min-height: 70px; /* Mínimo para 4 linhas aprox. */
-    resize: vertical; /* Permite redimensionar verticalmente */
-}
-
-
-.controls button, button#save-content-button { /* Estilo comum botões ação */
-    background-color: #007bff; color: white; cursor: pointer;
-    transition: background-color 0.2s ease; text-align: center;
-}
-.controls button:hover, button#save-content-button:hover { background-color: #0056b3; }
-
-  .management-controls { background-color: #e9ecef; align-items: stretch; margin-bottom: 0; }
-  .management-controls .control-group { flex-direction: row; align-items: center; flex-basis: auto; min-width: 0; gap: 5px; }
-   .management-controls .control-group.full-width-mobile { flex-basis: 100%; }
-  .management-controls label { margin-bottom: 0; margin-right: 0; width: auto; flex-shrink: 0; }
-   .management-controls input[type="text"] { width: auto; flex-grow: 1; }
-   .management-controls button { width: auto; flex-grow: 0; flex-shrink: 0; }
-
-#collapsible-section { margin-bottom: 15px; }
-#collapsible-section.hidden { display: none; }
-
-.status-message { text-align: center; padding: 8px; margin-bottom: 12px; border-radius: 4px; font-weight: bold; }
-#loading { background-color: #e0e0e0; color: #333; }
-#updateStatus { min-height: 1.5em; }
-#updateStatus.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-#updateStatus.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+#content-modal select, #content-modal textarea, #content-modal button#save-content-button { /* ... estilos iguais ... */ padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; width: 100%; box-sizing: border-box; height: 36px; }
+#content-modal textarea { /* ... estilos iguais ... */ height: auto; min-height: 70px; resize: vertical; }
+.controls button, button#save-content-button { /* ... estilos iguais ... */ background-color: #007bff; color: white; cursor: pointer; transition: background-color 0.2s ease; text-align: center; }
+.controls button:hover, button#save-content-button:hover { /* ... estilos iguais ... */ background-color: #0056b3; }
+  .management-controls { /* ... estilos iguais ... */ background-color: #e9ecef; align-items: stretch; margin-bottom: 0; }
+  .management-controls .control-group { /* ... estilos iguais ... */ flex-direction: row; align-items: center; flex-basis: auto; min-width: 0; gap: 5px; }
+   .management-controls .control-group.full-width-mobile { /* ... estilos iguais ... */ flex-basis: 100%; }
+  .management-controls label { /* ... estilos iguais ... */ margin-bottom: 0; margin-right: 0; width: auto; flex-shrink: 0; }
+   .management-controls input[type="text"] { /* ... estilos iguais ... */ width: auto; flex-grow: 1; }
+   .management-controls button { /* ... estilos iguais ... */ width: auto; flex-grow: 0; flex-shrink: 0; }
+#collapsible-section { /* ... estilos iguais ... */ margin-bottom: 15px; }
+#collapsible-section.hidden { /* ... estilos iguais ... */ display: none; }
+.status-message { /* ... estilos iguais ... */ text-align: center; padding: 8px; margin-bottom: 12px; border-radius: 4px; font-weight: bold; }
+#loading { /* ... estilos iguais ... */ background-color: #e0e0e0; color: #333; }
+#updateStatus { /* ... estilos iguais ... */ min-height: 1.5em; }
+#updateStatus.success { /* ... estilos iguais ... */ background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+#updateStatus.error { /* ... estilos iguais ... */ background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
 /* --- ESTILOS DA TABELA --- */
+/* ... (todas as regras da tabela iguais às anteriores) ... */
 .table-container { width: 100%; overflow-x: auto; background-color: #fff; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 15px; max-height: 70vh; overflow-y: auto; }
 #attendanceTable { border-collapse: collapse; width: 100%; }
-
-#attendanceTable th, #attendanceTable td {
-    border: none; padding: 8px 6px; text-align: center; white-space: nowrap;
-    font-size: 0.85em; border-bottom: 1px solid #eee; border-right: 1px solid #eee;
-    vertical-align: middle;
-}
+#attendanceTable th, #attendanceTable td { border: none; padding: 8px 6px; text-align: center; white-space: nowrap; font-size: 0.85em; border-bottom: 1px solid #eee; border-right: 1px solid #eee; vertical-align: middle;}
 #attendanceTable td:last-child, #attendanceTable th:last-child { border-right: none; }
 #attendanceTable tr:last-child td { border-bottom: none; }
-
 #attendanceTable th:not(:first-child), #attendanceTable td:not(:first-child) { min-width: 45px; }
-
 #attendanceTable thead th { background-color: #D9534F; color: #ffffff; font-weight: bold; position: sticky; top: 0; z-index: 10; border-bottom: 2px solid #a94442; border-right: 1px solid #a94442; }
 #attendanceTable thead th:first-child { position: sticky; left: 0; background-color: #D9534F; color: #ffffff; z-index: 11; font-weight: bold; border-right: 2px solid #a94442; }
 #attendanceTable thead th:first-child, #attendanceTable tbody td:first-child { position: sticky; left: 0; min-width: 130px; max-width: 220px; text-align: left; overflow: hidden; text-overflow: ellipsis; border-right: 2px solid #ccc; }
@@ -147,7 +100,8 @@ h1 {
 #attendanceTable tbody tr:hover td:first-child { background-color: #e0e0e0; }
 #attendanceTable input[type="checkbox"] { cursor: pointer; transform: scale(1.0); vertical-align: middle; margin: 0; display: block; margin-left: auto; margin-right: auto; }
 
-/* === ESTILOS DO MODAL === */
+
+/* === ESTILOS DO MODAL (AJUSTADOS/REFORÇADOS) === */
 .modal-backdrop {
     display: none; /* Começa escondido */
     position: fixed;
@@ -155,8 +109,8 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Fundo semi-transparente */
-    z-index: 20; /* Abaixo do modal, acima do resto */
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000; /* Z-index MUITO ALTO */
 }
 
 .modal {
@@ -169,78 +123,43 @@ h1 {
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    z-index: 21; /* Acima do backdrop */
-    width: 90%; /* Responsivo */
-    max-width: 500px; /* Largura máxima */
-    max-height: 80vh; /* Altura máxima */
-    overflow-y: auto; /* Scroll se conteúdo for maior */
+    z-index: 1001; /* Z-index AINDA MAIS ALTO que o backdrop */
+    width: 90%;
+    max-width: 500px;
+    max-height: 85vh; /* Aumentado um pouco a altura máxima */
+    overflow-y: auto;
 }
 
+/* Classe para mostrar - adiciona !important para teste se necessário */
 .modal.visible,
 .modal-backdrop.visible {
-    display: block; /* Classe para mostrar */
+    display: block; /* Força o display block */
 }
 
 .modal-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1.6em;
-    font-weight: bold;
-    line-height: 1;
-    color: #888;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0 5px;
+    position: absolute; top: 10px; right: 10px; font-size: 1.6em; font-weight: bold;
+    line-height: 1; color: #888; background: none; border: none; cursor: pointer; padding: 0 5px;
 }
-.modal-close-btn:hover {
-    color: #333;
-}
+.modal-close-btn:hover { color: #333; }
 
-.modal h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-}
-
-.modal .modal-content {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Espaço entre os elementos do formulário */
-}
-
-.modal .control-group label { /* Garante que label no modal também seja block */
-     display: block;
-     margin-bottom: 3px;
-     font-weight: bold;
-}
-
-/* Status inline para modal */
-.status-message-inline {
-    text-align: center;
-    padding: 5px;
-    margin-top: 5px;
-    border-radius: 4px;
-    font-size: 0.9em;
-    min-height: 1.2em;
-}
-/* Compartilha cores com status principal */
+.modal h3 { margin-top: 0; margin-bottom: 20px; text-align: center; color: #333; }
+.modal .modal-content { display: flex; flex-direction: column; gap: 15px; }
+.modal .control-group label { display: block; margin-bottom: 3px; font-weight: bold; }
+.status-message-inline { text-align: center; padding: 5px; margin-top: 5px; border-radius: 4px; font-size: 0.9em; min-height: 1.2em; }
 .status-message-inline.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
 .status-message-inline.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-
 /* === FIM ESTILOS DO MODAL === */
 
 
 /* === Media Queries === */
+/* ... (iguais às anteriores) ... */
 @media (max-width: 700px) {
     h1 { font-size: 1.6em; padding: 0 50px; }
     #school-logo { height: 35px; left: 5px; }
     #hamburger-menu { font-size: 1.4em; height: 34px; right: 5px; }
     #subtitle-info { font-size: 0.85em; }
     #content-edit-button { font-size: 0.85em; padding: 7px 12px;}
-    .modal { padding: 20px; } /* Menos padding no modal */
+    .modal { padding: 20px; width: 92%; /* Aumenta um pouco a largura */}
     .modal h3 { font-size: 1.1em; margin-bottom: 15px;}
 
     .controls { padding: 8px; gap: 8px; align-items: stretch; }
@@ -260,7 +179,7 @@ h1 {
     #hamburger-menu { font-size: 1.3em; height: 32px; }
     #subtitle-info { font-size: 0.8em; }
     #content-edit-button { font-size: 0.8em;}
-    .modal { padding: 15px; }
+    .modal { padding: 15px; width: 95%; /* Quase largura total */}
     .modal h3 { font-size: 1.0em;}
 
     #attendanceTable th, #attendanceTable td { padding: 6px 4px; }
